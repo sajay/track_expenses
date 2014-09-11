@@ -6,5 +6,7 @@ urlpatterns = patterns('',
     # url(r'^$', 'track_expenses.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
-    url(r'^admin/', include(admin.site.urls)),
+    #url(r'^admin/', include(admin.site.urls)),
+    url(r'^managetool/$','admintool.views.admin_view'),
+    url(r'^$','admintool.views.admin_view')
 )
