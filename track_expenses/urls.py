@@ -8,7 +8,6 @@ urlpatterns = patterns('',
 
     #url(r'^admin/', include(admin.site.urls)),
     url(r'^managetool/$','admintool.views.admin_view'),
-    url(r'^$','admintool.views.admin_view')
-
-   
+    url(r'^$','admintool.views.admin_view'),
+    url(r'^timenow/$','admintool.views.time_display')
 )
