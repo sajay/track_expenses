@@ -3,3 +3,6 @@
 
 # ignore .swp files
 *.swp
+
+#Ignore the OSX generated file .DS_store
+*.DS_store
