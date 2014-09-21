@@ -6,4 +6,4 @@ class Expense(models.Model):
     amount_spent = models.DecimalField(max_digits=5, decimal_places=2)
 
     def __unicode__(self):
-        return "Expense " + str(self.id) + " Date : " + str(self.date) + " Amount = " + str(self.amount_spent)
+        return "Expense " + str(self.date) + " Amount = " + str(self.amount_spent)
