@@ -8,3 +8,6 @@ env
 
 #Ignore the OSX generated file .DS_store
 *.DS_store
+
+#ignore DB.sqlite file. This project uses MySQL
+db.sqlite3
