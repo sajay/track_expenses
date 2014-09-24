@@ -1,0 +1,10 @@
+<h1> Expenses : Track your spending </h1>
+
+{% if all_expenses %}
+<ul>
+{% for expense in all_expenses %}
+    <li> {{expense.expense_date}} | {{expense.expenseCategory}} |
+    {{expense.expense_amount}} </li>
+{% endfor %}
+</ul>
+{% endif %}
