@@ -1,10 +1,22 @@
-<h1> Expenses : Track your spending </h1>
+<h1> Expense Incurred </h1>
 
 {% if all_expenses %}
-<ul>
+<table>
+    <tr>
+        <td>Date Spent</td>
+        <td>Category</td>
+        <td>Amount</td>
+        <td>Payment Type</td>
+        <td>Vendor</td>
+    </tr>
 {% for expense in all_expenses %}
-    <li> {{expense.expense_date}} | {{expense.expenseCategory}} |
-    {{expense.expense_amount}} </li>
+    <tr>
+    <td>{{expense.expense_date}}</td>
+    <td>{{expense.expenseCategory}}</td> 
+    <td>{{expense.expense_amount}}</td>
+    <td>{{expense.expenseType}}</td>
+    <td>{{expense.vendorType}}</td>
+    </tr>
 {% endfor %}
-</ul>
+</table>
 {% endif %}
