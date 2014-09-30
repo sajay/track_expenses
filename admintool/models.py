@@ -34,6 +34,7 @@ class Expense(models.Model):
     vendorType = models.ForeignKey ( VendorType)
     expense_date = models.DateField()
     amount_spent = models.DecimalField(max_digits=5, decimal_places=2)
+    comments = models.CharField(max_length=100)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now_add=True)
 
