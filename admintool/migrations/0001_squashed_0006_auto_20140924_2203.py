@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import models, migrations
 import datetime
+from admintool.models import ExpenseCategory, VendorType, ExpenseType
 
 
 # Functions from the following migrations need manual copying.
