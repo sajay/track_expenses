@@ -1,0 +1,25 @@
+<doctype html>
+<html>
+    <head>
+        <title>Manage Expenses</title>
+    </head>
+
+    <body>
+       <h1> Add a new Expense  : </h1>
+       {% if form.errors %}
+           <p style="color:red;"> 	
+              Please correct the error{{ form.errors|pluralize }} below.
+           </p> 
+       {% endif %}
+        <form id="add_expense_form" method="post" action="/save_expense/" >
+        {% csrf_token  %}
+        {% for field in form %}
+            {{ field.label_tag }}: {{ field }}  <br>
+        {% endfor %}
+
+            <input type ="submit" name="Add Expense"  value="Submit"  />
+       
+        </form>
+    </body>
+         
+</html>

@@ -11,5 +11,7 @@ urlpatterns = patterns('',
     url(r'^$','admintool.views.admin_view'),
     url(r'^timenow/$','admintool.views.time_display'),
     url(r'^expenditure/', include('admintool.urls')),
- 
+    url(r'^add_expense/$','admintool.views.add_expense'),
+    url(r'^save_expense/$', 'admintool.views.save_expense')
 )
+
