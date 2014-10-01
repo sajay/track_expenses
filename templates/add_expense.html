@@ -4,6 +4,19 @@
         <title>Manage Expenses</title>
     </head>
 
+   <style>
+   p {
+       color:red;
+       text-align:left;
+   } 
+  </style>  
+  
+    {% if messages %} 
+      {% for message in messages %}
+      
+      <p>   {{ message }} </p>
+      {% endfor  %}
+    {% endif %}
     <body>
        <h1> Add a new Expense  : </h1>
        {% if form.errors %}
