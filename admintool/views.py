@@ -35,9 +35,6 @@ def add_expense(request):
         form = ExpenseForm(request.GET)
 
         if form.is_valid():
-      #      form.save(commit=True)
-      #      return index(request)
-            print "Form is valid"
             return render( request, 'add_expense.html', {'form':form})      
 
         else:
@@ -52,31 +49,18 @@ def save_expense(request):
     errors=[]
     form=ExpenseForm(request.POST)
     expenseCategory = request.POST["expenseCategory"]
-    print expenseCategory
     expenseType = request.POST["expenseType"]
-    print expenseType
     vendorType = request.POST["vendorType"]
-    print vendorType
     expense_date = request.POST["expense_date"]
-    print expense_date
-   
     month,day ,year=expense_date.split('/')
-    print day
-    print month
-    print year
-
     amount_spent = request.POST["amount_spent"] 
-    print amount_spent
-
     comments = request.POST["comments"]
     if comments is None:
         comments = ""  
-    print comments
 
     ec=Expense(expenseCategory = ExpenseCategory(expenseCategory),expenseType = ExpenseType(expenseType) ,vendorType = VendorType( vendorType) ,expense_date = datetime.date(int(year), int(month), int(day))  , amount_spent = amount_spent , comments = comments )
-     
 
     ec.save()
-    messages.success( request, "Form data was saved successfully" )
+    messages.success( request, "Form data was saved successfully." )
     return render( request,  'add_expense.html' ,{'form':form} )  
 
