@@ -13,7 +13,7 @@ class ExpenseForm(forms.Form):
     vendorType =   forms.ModelChoiceField(queryset=VendorType.objects.all(), required=False ) 
     expense_date = forms.DateField( required=False )
     amount_spent  = forms.DecimalField(required=False)
-
+    comments =  forms.CharField(required=False, widget=forms.Textarea)
 
     class Meta:
         model=Expense
