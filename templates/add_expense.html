@@ -9,6 +9,11 @@
        color:red;
        text-align:left;
    } 
+
+   h1 {
+       color:blue;
+       text-align:left;
+   }  
   </style>  
   
     {% if messages %} 
@@ -19,20 +24,20 @@
     {% endif %}
     <body>
        <h1> Add a new Expense  : </h1>
-       {% if form.errors %}
-           <p style="color:red;"> 	
-              Please correct the error{{ form.errors|pluralize }} below.
-           </p> 
-       {% endif %}
+      <div>
         <form id="add_expense_form" method="post" action="/save_expense/" >
         {% csrf_token  %}
-        {% for field in form %}
-            {{ field.label_tag }}: {{ field }}  <br>
-        {% endfor %}
-
+        <table>
+            {% for field in form %}
+                <tr>
+                    <td> {{ field.label_tag }}</td><td> {{ field }}</td>  
+            {% endfor %}
+                </tr>
+        </table>
             <input type ="submit" name="Add Expense"  value="Submit"  />
        
         </form>
+      </div>
     </body>
          
 </html>
