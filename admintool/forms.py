@@ -2,10 +2,18 @@ from django import forms
 from admintool.models import ExpenseCategory, ExpenseType, VendorType, Expense
 
 def clean_amount_spent(self):
+    print "Into clean_amount_spent" 
     amount_spent = self.cleaned_data['amount_spent']
     if amount_spent <= 0:
         raise forms.ValidationError("Amount Spent must be greater than zero:" )
     return amount_spent 
+
+def clean_expense_date(self):
+    print "Into clean_expense_date" 
+    expense_date = self.cleaned_date['expense_date']
+    if expense_date is None:
+        raise forms.ValidationError("Expense Date cannot be blank:")
+    return expense_date	
 
 class ExpenseForm(forms.Form):
     expenseCategory = forms.ModelChoiceField(label="Expense Category", queryset=ExpenseCategory.objects.all() , required=False, empty_label=None )

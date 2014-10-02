@@ -52,11 +52,22 @@ def save_expense(request):
     expenseType = request.POST["expenseType"]
     vendorType = request.POST["vendorType"]
     expense_date = request.POST["expense_date"]
-    month,day ,year=expense_date.split('/')
     amount_spent = request.POST["amount_spent"] 
     comments = request.POST["comments"]
-    if comments is None:
-        comments = ""  
+    
+    if len(expense_date) == 0  and len(amount_spent) == 0:
+        messages.error(request, "Expense Date is a required field:" )
+        messages.error(request, "Amount Spent is a required field:" )
+        return render(request, 'add_expense.html', {'form':form}) 
+    if len(expense_date) == 0:
+        print "Into  expense_date is  None" 
+        messages.error(request, "Expense Date is a required field:") 
+        return render( request, 'add_expense.html', {'form':form})
+    if len(amount_spent) == 0:  
+        messages.error(request, "Amount Spent is a required field:" )
+        return render( request, 'add_expense.html', {'form':form})
+
+    month,day,year = expense_date.split('/')
 
     ec=Expense(expenseCategory = ExpenseCategory(expenseCategory),expenseType = ExpenseType(expenseType) ,vendorType = VendorType( vendorType) ,expense_date = datetime.date(int(year), int(month), int(day))  , amount_spent = amount_spent , comments = comments )
 
