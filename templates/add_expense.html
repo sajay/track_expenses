@@ -2,7 +2,15 @@
 <html>
     <head>
         <title>Manage Expenses</title>
-    </head>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.css" />
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+  <script>
+  $(function() {
+    $( "#id_expense_date" ).datepicker();
+  });
+  </script>
 
    <style>
 
@@ -39,8 +47,13 @@
        width:  500px;
    }
 
+  .center {
+      text-align:center;
+      border :1px solid #ff0000;
+  }
   </style>  
-  
+ </head> 
+
     {% if messages %} 
       {% for message in messages %}
       
@@ -48,11 +61,12 @@
       {% endfor  %}
     {% endif %}
     <body>
-       <h1> Add a new Expense  : </h1>
+       <h1> Expense Addition : </h1>
       <div>
         <form id="add_expense_form" method="post" action="/save_expense/" >
         {% csrf_token  %}
         <table>
+           <tr><td class="center" colspan="2"><b>Add new Expense:</b></td> </tr>
             {% for field in form %}
                 <tr>
                     <td> {{ field.label_tag }}</td><td> {{ field }}</td>  
