@@ -83,5 +83,16 @@ def save_expense(request):
 
     ec.save()
     messages.success( request, "Form data was saved successfully." )
-    return render( request,  'add_expense.html' ,{'form':form} )  
 
+
+    all_expenses = Expense.objects.all().order_by('updated_on')
+    
+    expenseCategory = ExpenseCategory.objects.all()
+    expenseType = ExpenseType.objects.all()
+    vendorType = VendorType.objects.all()
+ 
+
+
+    return render( request,  'add_expense.html' ,{'form':form, 'all_expenses':all_expenses, 'expenseCategory':expenseCategory, 'expenseType':expenseType, 'vendorType':vendorType} )  
+
+   # return render (request, 'add_expense.html', {'form':form})    

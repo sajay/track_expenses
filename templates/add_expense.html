@@ -78,6 +78,63 @@
        
         </form>
       </div>
-    </body>
+
+    
+{% if all_expenses %}
+<table border="1" cellspacing="0" cellpadding="3px"   >
+   <tr><td class="center" colspan="7"  ><b>Expense List </b></td> <tr>
+    <tr>
+        <td align="left"><strong>Date Spent</strong></td>
+        <td align="left"><strong>Category</strong></td>
+        <td align="left"><strong>Amount</strong></td>
+        <td align="left"><strong>Payment Type</strong></td>
+        <td align="left"><strong>Vendor</strong></td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+
+    </tr>
+{% for expense in all_expenses %}
+    <tr id ="tr_{{expense.id}}" value="{{expense.id}}">
+    <td><input type="text" id="id_expense_date" value="{{expense.expense_date}}"/></td>
+
+{% if expenseCategory %}
+<td><select id="id_expenseCategory" name="expenseCategory">
+   {% for cat in expenseCategory %}
+       <option value="{{cat.id }}"   {% if cat.id ==  expense.expenseCategory_id %} selected="selected" {% endif %} >  {{cat.category_name }}  </option>
+    {% endfor %} 
+ </select>
+</td>
+{% endif %} 
+    <td><input type="text" id="id_amount" value="{{expense.amount_spent}}"/></td>
+
+{% if expenseType %}
+    <td><select id="id_expense_type" name="expenseType" >
+     {% for typ in expenseType %}
+        <option value="{{typ.id}}" {% if typ.id == expense.expenseType_id %} selected="selected" {% endif %}> {{typ.type_name }} </option>
+    {% endfor %}
+  </select>
+ </td>
+{% endif %} 
+
+
+{% if vendorType %}
+    <td><select id="id_vendor_type" name="vendorType" >
+    {% for vtyp in vendorType %} 
+       <option value="{{vtyp.id }}" {% if vtyp.id == expense.vendorType_id %} selected="selected" {% endif %}> {{vtyp.vendor_name}} </option>
+    {% endfor %}
+   </select>
+   </td>
+ {% endif %}
+
+  <td><input name="Button" type="button"  value="Update"/></td>
+  <td><input name="Button" type="button"  value="Delete"/></td>
+
+ 
+  </tr>
+{% endfor %}
+</table>
+{% endif %}
+
+  </body>
          
 </html>
