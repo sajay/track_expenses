@@ -1,10 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import RequestContext
+from django.template import Context,loader
 from django.contrib import messages
 import datetime 
 from admintool.forms import ExpenseForm
 from admintool.models import ExpenseCategory, ExpenseType, VendorType, Expense
+from django.contrib.auth.decorators import login_required
+
+
 
 # Create your views here.
 
@@ -20,12 +24,16 @@ def time_display(request):
 
 # Returns all expenses ordered by updated on
 
+
+@login_required(login_url='/login')
 def index(request):
     all_expenses = Expense.objects.all().order_by('updated_on')
     t = loader.get_template('admintool/index.html')
     c = Context({'all_expenses':all_expenses,})
     return HttpResponse(t.render(c))
 
+
+@login_required(login_url='/login')
 def add_expense(request):
     errors =[]
     context = RequestContext(request)
