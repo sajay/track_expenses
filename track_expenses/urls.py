@@ -8,10 +8,13 @@ urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^managetool/$','admintool.views.admin_view'),
-    url(r'^$','admintool.views.admin_view'),
+    #url(r'^$','admintool.views.admin_view'),
+    url(r'^$',include('admintool.urls')),
     url(r'^timenow/$','admintool.views.time_display'),
     url(r'^expenditure/', include('admintool.urls')),
     url(r'^add_expense/$','admintool.views.add_expense'),
-    url(r'^save_expense/$', 'admintool.views.save_expense')
+    url(r'^save_expense/$', 'admintool.views.save_expense'),
+    url(r'^login/$', 'django.contrib.auth.views.login'),
+    url(r'^logout/$', 'django.contrib.auth.views.logout'),
 )
 
