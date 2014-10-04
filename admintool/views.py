@@ -74,7 +74,7 @@ def save_expense(request):
     if len(amount_spent) == 0:  
         messages.error(request, "Amount Spent is a required field:" )
         return render( request, 'add_expense.html', {'form':form})
-    if int(amount_spent) <=  0:
+    if float(amount_spent) <=  0:
         messages.error(request, "Amount spent must be greater than zero") 
         return render( request, 'add_expense.html', {'form':form})
 

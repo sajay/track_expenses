@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
-    {% block title %} Add Expenses {% endblock %}
-    {% block customjsfunctions %}
+   {% block customjsfunctions %}
       $(function() {
         $( "#id_expense_date" ).datepicker();
      });
@@ -13,8 +12,9 @@
       <p>   {{ message }} </p>
       {% endfor  %}
     {% endif %}
-    <body>
-       <h1> Expense Addition : </h1>
+    
+    {% block title %} Add Your Expenses {% endblock %}
+ 
       <div>
         <form id="add_expense_form" method="post" action="/save_expense/" >
         {% csrf_token  %}
