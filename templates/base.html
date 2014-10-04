@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{% block title %}Plan and Track Expenses{% endblock %}</title>
+    </head>
+    <body>
+        <div>
+            {{ user }}
+            {% if user.is_anonymous %}
+                <a href="{% url 'django.contrib.auth.views.login' %}">Login</a>
+            {% else %}
+                <a href="{% url 'django.contrib.auth.views.logout' %}">Logout</a>
+            {% endif %}
+        </div>
+    </body>
+</html>
