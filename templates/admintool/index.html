@@ -1,4 +1,10 @@
+{% extends 'base.html' %}
+
+{% block title %}
 <h1> Expense Incurred </h1>
+{% endblock %}
+
+{% block content %}
 
 {% if all_expenses %}
 <table>
@@ -20,3 +26,5 @@
 {% endfor %}
 </table>
 {% endif %}
+
+{% endblock %}

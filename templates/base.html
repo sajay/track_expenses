@@ -1,16 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>{% block title %}Plan and Track Expenses{% endblock %}</title>
+        <title>
+            {% block title %}Plan and Track Your Expenses{% endblock %}
+        </title>
+            <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.css" />
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+    <script>
+        {% block customjsfunctions %} {% endblock %}
+      </script>
+
+    <style>
+
+    body {
+       background-color : #b0c4de;
+    }
+
+    p {
+       font-family:Arial,Helventica, sans-setrif;
+       font-size:75%; 
+       color:red;
+       text-align:left;
+    } 
+
+    h1 {
+       font-family:Arial,Helvetica,sans-serif;
+       font-size:100%;
+       color:blue;
+       text-align:left;
+    }  
+  
+    table {
+       border:1px solid black;
+    }
+
+    label {
+       font-family:Arial,Helveticia,sans-serif;
+       font-size:100%;
+       text-align:left;
+    }
+
+    textarea {
+       height: 60px;
+       width:  500px;
+    }
+
+    .center {
+      text-align:center;
+      background-color:#D3472E; 
+      font-family:Arial,Helveticia,sans-serif;
+    }
+    </style>  
     </head>
     <body>
-        <div>
+    
+    <div>
+        {% if user.is_anonymous %}
+            <a href="{% url 'django.contrib.auth.views.login' %}">Login</a>
+        {% else %}
             {{ user }}
-            {% if user.is_anonymous %}
-                <a href="{% url 'django.contrib.auth.views.login' %}">Login</a>
-            {% else %}
-                <a href="{% url 'django.contrib.auth.views.logout' %}">Logout</a>
-            {% endif %}
-        </div>
+            <a href="{% url 'django.contrib.auth.views.logout' %}">Logout</a>
+        {% endif %}
+    </div>
+        
+        {% block content %}
+        {% endblock %}
+    
     </body>
 </html>
