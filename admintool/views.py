@@ -27,7 +27,7 @@ def time_display(request):
 
 @login_required(login_url='/login')
 def index(request):
-    all_expenses = Expense.objects.all().order_by('updated_on')
+    all_expenses = Expense.objects.filter(created_by=request.user).order_by('updated_on')
     t = loader.get_template('admintool/index.html')
     c = Context({'all_expenses':all_expenses,})
     return HttpResponse(t.render(c))
@@ -74,18 +74,24 @@ def save_expense(request):
     if len(amount_spent) == 0:  
         messages.error(request, "Amount Spent is a required field:" )
         return render( request, 'add_expense.html', {'form':form})
-    if int(amount_spent) <=  0:
+    if float(amount_spent) <=  0:
         messages.error(request, "Amount spent must be greater than zero") 
         return render( request, 'add_expense.html', {'form':form})
 
     month,day,year = expense_date.split('/')
-    ec=Expense(expenseCategory = ExpenseCategory(expenseCategory),expenseType = ExpenseType(expenseType) ,vendorType = VendorType( vendorType) ,expense_date = datetime.date(int(year), int(month), int(day))  , amount_spent = amount_spent , comments = comments )
+    ec=Expense(expenseCategory = ExpenseCategory(expenseCategory),
+               expenseType = ExpenseType(expenseType) ,
+               vendorType = VendorType( vendorType),
+               expense_date = datetime.date(int(year), int(month), int(day))  ,
+               amount_spent = amount_spent , 
+               comments = comments ,
+               created_by = request.user)
 
     ec.save()
     messages.success( request, "Form data was saved successfully." )
 
 
-    all_expenses = Expense.objects.all().order_by('updated_on')
+    all_expenses = Expense.objects.filter(created_by=request.user).order_by('updated_on')
     
     expenseCategory = ExpenseCategory.objects.all()
     expenseType = ExpenseType.objects.all()

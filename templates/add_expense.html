@@ -1,32 +1,25 @@
-<doctype html>
-<html>
-    <head>
-        <title>Manage Expenses</title>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.css" />
-    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
-  <script>
-  $(function() {
+{% extends 'base.html' %}
+   {% block customjsfunctions %}
+    $(function() {
     $( "#id_expense_date" ).datepicker();
     $( "#id_expense_date_1").datepicker();
     $( "#id_expense_date_2").datepicker();
   });
 
-  $(document).ready(function(){ 
-//   alert('Into  document.ready') 
+  $(document).ready(function(){
+//   alert('Into  document.ready')
     $(":button").click(function(){
   //    alert($(this).attr('id'));
-        var id  =  $(this).attr('id'); 
-        alert('Id is : '  +  id  ) 
+        var id  =  $(this).attr('id');
+        alert('Id is : '  +  id  )
         var res = id.split("_")
         var oper = res[0];
         alert('oper is :  ' + oper )
         var key = res[1];
-        alert('key is:  ' + key )  
+        alert('key is:  ' + key )
 
 
-       
+
 
    });
 
@@ -35,55 +28,15 @@
        var id = $(this).attr('id');
        alert('Id is :' + id  )
   //  $("#id_expense_date_1").datepicker()
-      var id1 = "#"+id 
-     alert( 'id1 value is ' + id1  ) 
+      var id1 = "#"+id
+     alert( 'id1 value is ' + id1  )
   });
 });
 
-  </script>
 
-   <style>
 
-   body {
-       background-color : #b0c4de;
-   }
-
-   p {
-       font-family:Arial,Helventica, sans-setrif;
-       font-size:75%; 
-       color:red;
-       text-align:left;
-   } 
-
-   h1 {
-       font-family:Arial,Helvetica,sans-serif;
-       font-size:100%;
-       color:blue;
-       text-align:left;
-   }  
-  
-   table {
-       border:1px solid black;
-   }
-
-  label {
-       font-family:Arial,Helveticia,sans-serif;
-       font-size:100%;
-       text-align:left;
-  }
-
-   textarea {
-       height: 60px;
-       width:  500px;
-   }
-
-  .center {
-      text-align:center;
-      background-color:#D3472E; 
-      font-family:Arial,Helveticia,sans-serif;
-  }
-  </style>  
- </head> 
+    {% endblock %}
+ {% block content %}
 
     {% if messages %} 
       {% for message in messages %}
@@ -91,8 +44,9 @@
       <p>   {{ message }} </p>
       {% endfor  %}
     {% endif %}
-    <body>
-       <h1> Expense Addition : </h1>
+    
+    {% block title %} Add Your Expenses {% endblock %}
+ 
       <div>
         <form id="add_expense_form" method="post" action="/save_expense/" >
         {% csrf_token  %}
@@ -165,6 +119,4 @@
 </table>
 {% endif %}
 
-  </body>
-         
-</html>
+{% endblock %}
