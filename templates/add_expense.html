@@ -1,39 +1,66 @@
 {% extends 'base.html' %}
    {% block customjsfunctions %}
     $(function() {
-    $( "#id_expense_date" ).datepicker();
-    $( "#id_expense_date_1").datepicker();
-    $( "#id_expense_date_2").datepicker();
+       $( "#id_expense_date" ).datepicker();
   });
 
   $(document).ready(function(){
-//   alert('Into  document.ready')
-    $(":button").click(function(){
-  //    alert($(this).attr('id'));
-        var id  =  $(this).attr('id');
-        alert('Id is : '  +  id  )
-        var res = id.split("_")
-        var oper = res[0];
-        alert('oper is :  ' + oper )
-        var key = res[1];
-        alert('key is:  ' + key )
+   alert('Into  document.ready')
+     $("#errorDiv").dialog({autoOpen:false,bgiframe:true,
+                            closeOnEscape:true, title:'Application Error',
+                            buttons:{"Ok": function() { $(this).dialog("close");}}});
+     $("#messageDiv").dialog({autoOpen:false,bgiframe:true,
+                            closeOnEscape:true, title:'Application Message',
+                            buttons:{"Ok": function() { $(this).dialog("close");}}});
 
+//     var form  = $('#add_expense_form');
+//     var submit = $('#submit');
+//     form.on('submit', function(e) {
+//        e.preventDefault(); 
 
+   // $(":button").click(function(){
+      $(".graybtn").click(function(){
+//       alert($(this).attr('id'));
+       var id  =  $(this).attr('id');
+       var res = id.split("_")
+       var oper = res[0];
+       var key = res[1];
 
+       if ( oper == "up") { // Update Record 
+        // jQuery.post( '/update_expense/', 
+          //            {id:key,   }
+       } else if (oper == "dl"  )  { // Delete Record 
+         var delPrompt = confirm("Are you sure you  want to  delete this Expense record?");
+         if(delPrompt){
+         jQuery.post('/delete_expense/', 
+                      {"id":key, "csrfmiddlewaretoken":"{{csrf_token}}"  },
+                      function(response){
+                       if(response.substring(0,5) == "Error" ){  
+                         $("#errorBody").html(response);
+                         $("#errorDiv").dialog("open");
+                      }else{
+                         var col  = $(".graybtn").parent().get(0);
+                         var row = $(col).parent("tr");
+                         row.remove();
+                         $("#messageBody").html(response);
+                         $("#messageDiv").dialog("open");
+                      }// end of else   
 
+            } // end of function(response)
+         );// matching with parenthesis before delete_expense
+       } // if(delPrompt) 
+    } // if( oper =="dl") 
    });
 
-   $(":text").click(function(){
-       alert($(this).attr('id'));
+ //  $(":text").click(function(){
+   $(".datepick").click(function(){
+//       alert($(this).attr('id'));
        var id = $(this).attr('id');
-       alert('Id is :' + id  )
-  //  $("#id_expense_date_1").datepicker()
-      var id1 = "#"+id
-     alert( 'id1 value is ' + id1  )
+  //     var idx = "'"+"#"+id+"'"
+      $('#'+id).datepicker() ;
   });
-});
-
-
+// }); // form.on
+}); //End of document.ready(function)
 
     {% endblock %}
  {% block content %}
@@ -58,13 +85,14 @@
             {% endfor %}
                 </tr>
         </table>
-            <input type ="submit" name="Add Expense"  value="Submit"  />
+            <input type ="submit" id="submit"  name="Add Expense"  value="Submit"  />
        
         </form>
       </div>
-
+<br>
     
 {% if all_expenses %}
+<div >
 <table border="1" cellspacing="0" cellpadding="3px"   >
    <tr><td class="center" colspan="7"  ><b>Expense List </b></td> <tr>
     <tr>
@@ -79,7 +107,7 @@
     </tr>
 {% for expense in all_expenses %}
     <tr id ="tr_{{expense.id}}" value="{{expense.id}}">
-    <td><input type="text" id="id_expense_date_{{expense.id}}" value="{{expense.expense_date}}"/></td>
+    <td id = "{{expense.id}}" ><input type="text" class="datepick" id="id_expense_date_{{expense.id}}" value="{{expense.expense_date}}"/></td>
 
 {% if expenseCategory %}
 <td><select id="id_expenseCategory_{{expense.id}}" name="expenseCategory">
@@ -89,7 +117,7 @@
  </select>
 </td>
 {% endif %} 
-    <td><input type="text" id="id_amount_{{expense.id}}" value="{{expense.amount_spent}}"/></td>
+    <td><input type="text"  id="id_amount_{{expense.id}}" value="{{expense.amount_spent}}"/></td>
 
 {% if expenseType %}
     <td><select id="id_expense_type_{{expense.id}}" name="expenseType" >
@@ -110,13 +138,24 @@
    </td>
  {% endif %}
 
-  <td><input name="Button" id="up_{{expense.id}}" type="button"  value="Update"/></td>
-  <td><input name="Button" id="dl_{{expense.id}}" type="button"  value="Delete"/></td>
+  <td><input name="Button" class="graybtn"  id="up_{{expense.id}}" type="button"  value="Update"/></td>
+  <td><input name="Button" class="graybtn"  id="dl_{{expense.id}}" type="button"  value="Delete"/></td>
 
  
-  </tr>
+ </tr>
 {% endfor %}
 </table>
+</div>
+ <div id="errorDiv">
+    <span id="errorBody"></span>
+ </div>
+
+ <div id="messageDiv">
+   <span id="messageBody"</span> 
+ </div>
+
+<br />
+
 {% endif %}
 
 {% endblock %}

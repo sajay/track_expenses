@@ -3,12 +3,11 @@ from django.http import HttpResponse
 from django.template import RequestContext
 from django.template import Context,loader
 from django.contrib import messages
+from django.core.exceptions import ObjectDoesNotExist
 import datetime 
 from admintool.forms import ExpenseForm
 from admintool.models import ExpenseCategory, ExpenseType, VendorType, Expense
 from django.contrib.auth.decorators import login_required
-
-
 
 # Create your views here.
 
@@ -23,7 +22,6 @@ def time_display(request):
     return HttpResponse(t.render(c))
 
 # Returns all expenses ordered by updated on
-
 
 @login_required(login_url='/login')
 def index(request):
@@ -53,9 +51,15 @@ def add_expense(request):
 
     return render(request, 'add_expense.html' , {'errors':errors} )
 
+@login_required(login_url='/login')
 def save_expense(request):
     errors=[]
-    form=ExpenseForm(request.POST)
+    if request.method == "POST":
+        form=ExpenseForm(request.POST)
+    else:
+        print "Method is Get, Return back."
+        return render (request, 'add_expense.html', {'form':form})
+   
     expenseCategory = request.POST["expenseCategory"]
     expenseType = request.POST["expenseType"]
     vendorType = request.POST["vendorType"]
@@ -101,4 +105,48 @@ def save_expense(request):
 
     return render( request,  'add_expense.html' ,{'form':form, 'all_expenses':all_expenses, 'expenseCategory':expenseCategory, 'expenseType':expenseType, 'vendorType':vendorType} )  
 
-   # return render (request, 'add_expense.html', {'form':form})    
+@login_required(login_url='/login')
+def update_expense(request):
+    
+    id = request.POST["id"] 
+    expenseCategory = request.POST["expenseCategory"]
+    expenseType = request.POST["expenseType"]
+    vendorType = request.POST["vendorType"]
+    expense_date = request.POST["expense_date"]
+    amount_spent = request.POST["amount_spent"] 
+    comments = request.POST["comments"]
+    try:
+        exp = Expense.objects.get(pk=id)
+    except ObjectDoesNotExist:
+        return HttpResponse("Error, Could not find record for id : " + id   ) 
+    
+    if len(expense_date) == 0  and len(amount_spent) == 0:
+        return HttpResponse( "Error,  <b>Expense Date</b>  and <b> Amount Spent</b> are required fields:"  )
+    if len(expense_date) == 0:
+        return HttpResponse( "Error, <b>Expense Date</b> is a required field:") 
+    if len(amount_spent) == 0:  
+        return HttpResponse( "Error, <b>Amount Spent</b> is a required field:" )
+    if float(amount_spent) <=  0:
+        return HttpResponse( "Error, <b>Amount spent</b> must be greater than zero:") 
+
+    exp.expenseCategory = expenseCategory
+    exp.expenseType = expenseType
+    exp.vendorType = vendorType
+    exp.expense_date = expense_date
+    exp.amount_spent = amount_spent
+    exp.comments =  comments 
+
+    exp.save()
+    return HttpResponse("Success, Expense Record has been updated successfully.") 
+@login_required(login_url='/login')
+def delete_expense(request):
+    print "Into delete_expense"
+    id = request.POST["id"]
+    print "Deleted Record is :" 
+    print id
+    try:
+        exp = Expense.objects.get(pk=id)
+    except ObjectDoesNotExist:
+        return HttpResponse("Error, Could not find record for id : " + id   ) 
+    exp.delete()      
+    return HttpResponse("Success, Expense Record has been deleted successfully.")

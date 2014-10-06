@@ -44,7 +44,7 @@
 
     textarea {
        height: 60px;
-       width:  500px;
+       width:  625px;
     }
 
     .center {
@@ -52,6 +52,11 @@
       background-color:#D3472E; 
       font-family:Arial,Helveticia,sans-serif;
     }
+
+   .successDiv {
+     background-color : #e6f2ea;border:2px solid rgb(0,102,51);
+     padding: 2ex 2ex 2ex; color: #006633;
+   }
     </style>  
     </head>
     <body>
@@ -60,8 +65,12 @@
         {% if user.is_anonymous %}
             <a href="{% url 'django.contrib.auth.views.login' %}">Login</a>
         {% else %}
-            {{ user }}
-            <a href="{% url 'django.contrib.auth.views.logout' %}">Logout</a>
+          <table border="0" cellspacing="0" cellpadding="0">
+            <tr valign="middle">
+              <td align="right">User:&nbsp; {{ user }}</td>
+              <td align="right"> <a href="{% url 'django.contrib.auth.views.logout' %}">&nbsp;&nbsp;Logout</a></td>
+           </tr>
+        </table>
         {% endif %}
     </div>
         
