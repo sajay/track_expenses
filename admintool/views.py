@@ -4,6 +4,8 @@ from django.template import RequestContext
 from django.template import Context,loader
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponse, HttpResponseNotFound,HttpResponseRedirect
+from django.core.urlresolvers import reverse
 import datetime 
 from admintool.forms import ExpenseForm
 from admintool.models import ExpenseCategory, ExpenseType, VendorType, Expense
@@ -41,8 +43,11 @@ def add_expense(request):
         form = ExpenseForm(request.GET)
 
         if form.is_valid():
-            return render( request, 'add_expense.html', {'form':form})      
-
+            all_expenses = Expense.objects.filter(created_by=request.user).order_by('updated_on')
+            expenseCategory = ExpenseCategory.objects.all()
+            expenseType = ExpenseType.objects.all()
+            vendorType = VendorType.objects.all()
+            return render( request,  'add_expense.html' ,{'form':form, 'all_expenses':all_expenses, 'expenseCategory':expenseCategory, 'expenseType':expenseType, 'vendorType':vendorType} )  
         else:
             print form.errors
     else:
@@ -52,12 +57,14 @@ def add_expense(request):
     return render(request, 'add_expense.html' , {'errors':errors} )
 
 @login_required(login_url='/login')
+
 def save_expense(request):
     errors=[]
     if request.method == "POST":
         form=ExpenseForm(request.POST)
     else:
         print "Method is Get, Return back."
+        form = ExpenseForm()
         return render (request, 'add_expense.html', {'form':form})
    
     expenseCategory = request.POST["expenseCategory"]
@@ -93,19 +100,12 @@ def save_expense(request):
 
     ec.save()
     messages.success( request, "Form data was saved successfully." )
+    return HttpResponseRedirect(reverse(add_expense)) 
 
 
-    all_expenses = Expense.objects.filter(created_by=request.user).order_by('updated_on')
-    
-    expenseCategory = ExpenseCategory.objects.all()
-    expenseType = ExpenseType.objects.all()
-    vendorType = VendorType.objects.all()
- 
-
-
-    return render( request,  'add_expense.html' ,{'form':form, 'all_expenses':all_expenses, 'expenseCategory':expenseCategory, 'expenseType':expenseType, 'vendorType':vendorType} )  
 
 @login_required(login_url='/login')
+
 def update_expense(request):
     
     id = request.POST["id"] 
@@ -137,7 +137,8 @@ def update_expense(request):
     exp.comments =  comments 
 
     exp.save()
-    return HttpResponse("Success, Expense Record has been updated successfully.") 
+    return HttpResponse("Success, Expense Record has been updated successfully.")
+
 @login_required(login_url='/login')
 def delete_expense(request):
     print "Into delete_expense"
