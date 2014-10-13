@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
    {% block customjsfunctions %}
     $(function() {
-       $( "#id_expense_date" ).datepicker();
+       $( "#id_expense_date" ).datepicker({dateFormat:'mm-dd-yy'});
   });
 
   $(document).ready(function(){
@@ -27,9 +27,42 @@
        var key = res[1];
 
        if ( oper == "up") { // Update Record 
-        // jQuery.post( '/update_expense/', 
-          //            {id:key,   }
-       } else if (oper == "dl"  )  { // Delete Record 
+            
+            var newDateSpent = $("#id_expense_date_"+key).val()
+            var newCategory = $("#id_expenseCategory_"+key).val()
+            var newAmount = $("#id_amount_"+key).val()
+            var newPaymentType = $("#id_expense_type_"+key).val()
+            var newVendor = $("#id_vendor_type_"+key).val()
+
+            
+            alert('date spent up' +newDateSpent+ newCategory + newAmount +
+            newPaymentType + newVendor)
+
+            jQuery.post( '/update_expense/', 
+                     {"id":key, 
+                      "csrfmiddlewaretoken":"{{csrf_token}}",
+                      "expense_date":newDateSpent,
+                      "expenseCategory":newCategory,
+                      "amount_spent":newAmount,
+                      "expenseType":newPaymentType,
+                      "vendorType":newVendor},
+                      function(response){
+                        if(response.substring(0,5) == "Error"){
+                            $("#errorBody").html(response);
+                            $("#errorDiv").dialog("open");
+                        }
+                        else{
+                            //var col = $(".graybtn").parent().get(0);
+                            //var row = $(col).parent("tr");
+                            //row.css("background-color":"green")
+                           $("#messageBody").html(response);
+                            $("#messageDiv").dialog("open");
+                        }//else close
+                      }//function response
+                      ) //post update
+                      alert("Updated")
+                      
+} else if (oper == "dl"  )  { // Delete Record 
          var delPrompt = confirm("Are you sure you  want to  delete this Expense record?");
          if(delPrompt){
          jQuery.post('/delete_expense/', 
@@ -130,7 +163,7 @@
 
 
 {% if vendorType %}
-    <td><select id="id_vendor_type" name="vendorType" >
+    <td><select id="id_vendor_type_{{expense.id}}" name="vendorType" >
     {% for vtyp in vendorType %} 
        <option value="{{vtyp.id }}" {% if vtyp.id == expense.vendorType_id %} selected="selected" {% endif %}> {{vtyp.vendor_name}} </option>
     {% endfor %}

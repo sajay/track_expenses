@@ -107,14 +107,14 @@ def save_expense(request):
 @login_required(login_url='/login')
 
 def update_expense(request):
-    
-    id = request.POST["id"] 
+   
+    id = request.POST["id"]
     expenseCategory = request.POST["expenseCategory"]
     expenseType = request.POST["expenseType"]
     vendorType = request.POST["vendorType"]
     expense_date = request.POST["expense_date"]
     amount_spent = request.POST["amount_spent"] 
-    comments = request.POST["comments"]
+    #comments = request.POST["comments"]
     try:
         exp = Expense.objects.get(pk=id)
     except ObjectDoesNotExist:
@@ -128,15 +128,23 @@ def update_expense(request):
         return HttpResponse( "Error, <b>Amount Spent</b> is a required field:" )
     if float(amount_spent) <=  0:
         return HttpResponse( "Error, <b>Amount spent</b> must be greater than zero:") 
-
-    exp.expenseCategory = expenseCategory
-    exp.expenseType = expenseType
-    exp.vendorType = vendorType
-    exp.expense_date = expense_date
+    print "B4 date split###### "+expense_date
+    exp.expenseCategory = ExpenseCategory(expenseCategory)
+    print "Start no error"
+    exp.expenseType = ExpenseType(expenseType)
+    exp.vendorType = VendorType(vendorType)
+    print " No error 1"
+    print datetime.datetime.strptime(expense_date, '%b. %d, %Y')
+    exp.expense_date = datetime.datetime.strptime(expense_date,'%b. %d, %Y')  
+    print "No error 2 after split"
     exp.amount_spent = amount_spent
-    exp.comments =  comments 
+    print "No error 3"
+    exp.created_by = request.user
+    print "No error 4"
+    exp.comments =  "TEST" 
 
     exp.save()
+    print "UPDATED"
     return HttpResponse("Success, Expense Record has been updated successfully.")
 
 @login_required(login_url='/login')
