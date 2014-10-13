@@ -89,11 +89,11 @@ def save_expense(request):
         messages.error(request, "Amount spent must be greater than zero") 
         return render( request, 'add_expense.html', {'form':form})
 
-    month,day,year = expense_date.split('/')
+    datetime.datetime.strptime(expense_date,'%b %d, %Y')  
     ec=Expense(expenseCategory = ExpenseCategory(expenseCategory),
                expenseType = ExpenseType(expenseType) ,
                vendorType = VendorType( vendorType),
-               expense_date = datetime.date(int(year), int(month), int(day))  ,
+               expense_date =  datetime.datetime.strptime(expense_date,'%b %d, %Y') ,
                amount_spent = amount_spent , 
                comments = comments ,
                created_by = request.user)
@@ -134,8 +134,8 @@ def update_expense(request):
     exp.expenseType = ExpenseType(expenseType)
     exp.vendorType = VendorType(vendorType)
     print " No error 1"
-    print datetime.datetime.strptime(expense_date, '%b. %d, %Y')
-    exp.expense_date = datetime.datetime.strptime(expense_date,'%b. %d, %Y')  
+    print datetime.datetime.strptime(expense_date, '%b %d, %Y')
+    exp.expense_date = datetime.datetime.strptime(expense_date,'%b %d, %Y')  
     print "No error 2 after split"
     exp.amount_spent = amount_spent
     print "No error 3"
