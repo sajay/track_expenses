@@ -1,0 +1,29 @@
+language: python
+
+services:
+- postgresql
+
+python:
+    - "2.7"
+
+env:
+    - DJANGO_VERSION=1.7 DB=mysql
+
+install:
+    - pip install . --use-mirrors
+    - pip install -r requirements.txt --use-mirrors
+
+#before_script:
+ #   - mysql -e 'create database expenses_db;' -U postgres
+  #  - python manage.py migrate --noinput
+
+ 
+script:
+    - python manage.py test
+
+notifications:
+    email:
+        recipients:
+            -sajaynix@gmail.com
+        on_success: always
+        on_failure: always

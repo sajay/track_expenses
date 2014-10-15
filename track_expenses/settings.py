@@ -74,13 +74,16 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+#TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+
+# Commented since we are getting a runtime warning:
+# received a naive datetime while time zone support is active.
+#USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
@@ -89,5 +92,3 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 TEMPLATE_DIRS = (os.path.join(BASE_DIR,  'templates'),)
-
-LOGIN_REDIRECT_URL = '/'
