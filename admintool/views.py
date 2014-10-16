@@ -39,7 +39,6 @@ def add_expense(request):
     context = RequestContext(request)
  
     if request.method == "GET":
-        print "Into Http-GET" 
         form = ExpenseForm(request.GET)
 
         if form.is_valid():
@@ -51,7 +50,6 @@ def add_expense(request):
         else:
             print form.errors
     else:
-        print "Form is not valid" 
         form1=ExpenseForm()
 
     return render(request, 'add_expense.html' , {'errors':errors} )
@@ -63,7 +61,6 @@ def save_expense(request):
     if request.method == "POST":
         form=ExpenseForm(request.POST)
     else:
-        print "Method is Get, Return back."
         form = ExpenseForm()
         return render (request, 'add_expense.html', {'form':form})
    

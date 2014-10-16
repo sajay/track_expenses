@@ -48,6 +48,13 @@ class AdminToolTests(TestCase):
         #assertions
         self.assertContains(response, "<h1> Expense Incurred </h1>")
 
+    def test_call_to_root_view_denies_anonymous(self):
+        resp = self.client.get('/', follow=True)
+        self.assertEquals(resp.redirect_chain[0][0], 'http://testserver/login?next=/')
+        self.assertEquals(resp.redirect_chain[0][1],302)
+
+
+
     def test_add_expense_resolves_to_add_view(self):
         add_expense_page = resolve('/add_expense/')
         self.assertEquals(add_expense_page.func, views.add_expense)
@@ -69,3 +76,9 @@ class AdminToolTests(TestCase):
         
         #assertions
         self.assertContains(response, "Add Your Expenses")
+
+    def test_call_to_add_expense_view_denies_anonymous(self):
+        resp = self.client.get('/add_expense/', follow=True)
+        self.assertEquals(resp.redirect_chain[0][0], 'http://testserver/login?next=/add_expense/')
+        self.assertEquals(resp.redirect_chain[0][1],302)
+
