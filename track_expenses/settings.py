@@ -61,16 +61,21 @@ DATABASES = {
     'default': {
         'ENGINE':'django.db.backends.mysql',
         'NAME':'expenses_db',
+        'USER':'root',
+        'PASSWORD':'',
+        'HOST':'127.0.0.1',
+        'PORT':'3306',
+    },
+    'local':{
+        'ENGINE':'django.db.backends.mysql',
+        'NAME':'expenses_db',
         'USER':'sanix',
         'PASSWORD':'pyp@ss',
         'HOST':'127.0.0.1',
         'PORT':'3306',
-	'TEST_NAME':'test_expenses_db',
-	'TEST_USER':'root',
-	'TEST_PASSWORD':'',
-    }
+
+    },
 }
-#DATABASES ={}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
@@ -93,5 +98,7 @@ USE_L10N = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
+LOGIN_REDIRECT_URL = '/'
 
 TEMPLATE_DIRS = (os.path.join(BASE_DIR,  'templates'),)
