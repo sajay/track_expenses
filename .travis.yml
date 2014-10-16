@@ -12,9 +12,10 @@ env:
 install:
 #    - pip install . --use-mirrors
     - pip install -r requirements.txt --use-mirrors
+    - pip install mysql-python --use-mirrors
 
 before_script:
-   - mysql -e 'create database expenses_db;' 
+   - mysql -e 'create database IF NOT EXISTS test_expenses_db;' -uroot 
   #  - python manage.py migrate --noinput
 
  

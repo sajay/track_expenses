@@ -65,6 +65,9 @@ DATABASES = {
         'PASSWORD':'pyp@ss',
         'HOST':'127.0.0.1',
         'PORT':'3306',
+	'TEST_NAME':'test_expenses_db',
+	'TEST_USER':'root',
+	'TEST_PASSWORD':'',
     }
 }
 #DATABASES ={}
