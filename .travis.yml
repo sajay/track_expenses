@@ -16,7 +16,7 @@ install:
 
 before_script:
    - mysql -e 'create database IF NOT EXISTS test_expenses_db;' -uroot 
-  #  - python manage.py migrate --noinput
+   - python manage.py migrate --noinput
 
  
 script:
