@@ -61,19 +61,19 @@ DATABASES = {
     'default': {
         'ENGINE':'django.db.backends.mysql',
         'NAME':'expenses_db',
+        'USER':'sanix',
+        'PASSWORD':'pyp@ss',
+        'HOST':'127.0.0.1',
+        'PORT':'3306',
+    },
+    'test': {
+        'ENGINE':'django.db.backends.mysql',
+        'NAME':'expenses_db',
         'USER':'root',
         'PASSWORD':'',
         'HOST':'127.0.0.1',
         'PORT':'3306',
     },
-#    'local':{
-#        'ENGINE':'django.db.backends.mysql',
-#        'NAME':'expenses_db',
-#        'USER':'sanix',
-#        'PASSWORD':'pyp@ss',
-#        'HOST':'127.0.0.1',
-#        'PORT':'3306',
-#    },
 }
 
 # Internationalization
