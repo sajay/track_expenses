@@ -57,15 +57,28 @@
      background-color : #e6f2ea;border:2px solid rgb(0,102,51);
      padding: 2ex 2ex 2ex; color: #006633;
    }
+
+   .top{
+      height:75px;
+   }
+
+   .left {
+      width:150px;
+      float:left;
+   }
+
+  .main{
+     margin-left:150px;
+  }
     </style>  
     </head>
     <body>
     
-    <div>
+    <div class="top">
         {% if user.is_anonymous %}
             <a href="{% url 'django.contrib.auth.views.login' %}">Login</a>
         {% else %}
-          <table border="0" cellspacing="0" cellpadding="0">
+          <table >
             <tr valign="middle">
               <td align="right">User:&nbsp; {{ user }}</td>
               <td align="right"> <a href="{% url 'django.contrib.auth.views.logout' %}">&nbsp;&nbsp;Logout</a></td>
@@ -74,8 +87,23 @@
         {% endif %}
     </div>
         
+   <div class="left">
+  <table>
+   <tr>
+    <td >
+     <ul>
+        <li> Add Expense</li>
+        <li> List Expense</li>
+        <li><a href="/upload_target/"> Upload Targets</a>
+     </ul>
+     </td>
+    </tr>
+   </table>
+   </div>
+
+   <div class="main">
         {% block content %}
         {% endblock %}
-    
+   </div> 
     </body>
 </html>

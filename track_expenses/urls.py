@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     url(r'^save_expense/$', 'admintool.views.save_expense'),
     url(r'^delete_expense/$', 'admintool.views.delete_expense'),
     url(r'^update_expense/$', 'admintool.views.update_expense'),
+    url(r'^upload_target/$', 'admintool.views.upload_target'),
     url(r'^login/$', 'django.contrib.auth.views.login'),
     url(r'^logout/$', 'django.contrib.auth.views.logout'),
 )

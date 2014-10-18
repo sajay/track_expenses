@@ -1,5 +1,5 @@
 from django import forms
-from admintool.models import ExpenseCategory, ExpenseType, VendorType, Expense
+from admintool.models import ExpenseCategory, ExpenseType, VendorType, Expense,ExpenseTarget
 
 def clean_amount_spent(self):
     print "Into clean_amount_spent" 
@@ -26,3 +26,10 @@ class ExpenseForm(forms.Form):
     class Meta:
         model=Expense
         fields = ('expenseCategory', 'expenseType', 'vendorType', 'expense_date', 'amount_spent' ,  'comments' )
+
+class UploadFileForm(forms.Form):
+    targetfile=forms.FileField()
+ 
+    class Meta:
+        model=ExpenseTarget
+        fields=('targetfile')

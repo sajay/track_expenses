@@ -7,8 +7,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, HttpResponseNotFound,HttpResponseRedirect
 from django.core.urlresolvers import reverse
 import datetime 
-from admintool.forms import ExpenseForm
-from admintool.models import ExpenseCategory, ExpenseType, VendorType, Expense
+import csv
+from admintool.forms import ExpenseForm, UploadFileForm
+from admintool.models import ExpenseCategory, ExpenseType, VendorType, Expense, ExpenseTarget
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
@@ -148,3 +149,59 @@ def delete_expense(request):
         return HttpResponse("Error, Could not find record for id : " + id   ) 
     exp.delete()      
     return HttpResponse("Success, Expense Record has been deleted successfully.")
+
+@login_required(login_url='/login')
+def upload_target(request):
+    print "Into upload target"
+    if request.method == "GET":
+        print "Method is Get, Return back."
+        return render (request, 'upload_target.html')
+    if request.method == "POST":
+        print "Method is POST, process csv file:" 
+        form=UploadFileForm(request.POST, request.FILES) 
+        rowList= []
+        errorList=[]
+        file=request.FILES['targetfile']
+       # if file is None :
+       #     messages.error(request, "Please choose a file to upload:") ) 
+       #     return render( request, 'upload_target.html', {'form':form})
+        dataReader=csv.reader(file.read().splitlines())
+        for row in dataReader:
+            print "Into for loop :" 
+            if len(row[0])==0 or len(row[1])==0 or len(row[2])==0 or len(row[3])==0 or len(row[4]) == 0 :
+               errorList.append(row)
+            # Get expenseCategory_id from the ExpenseCategory value.
+            else:
+                try: 
+                    ec = ExpenseCategory.objects.get(category_name  = row[1].strip() )
+                except ObjectDoesNotExist:
+                    # Add to  errorList
+                    errorList.append(row) 
+                    break  # Get out of the else block.
+                print "ec.id is :" + str(ec.id  ) 
+                try:
+                    # Check whether the record has already been uploaded. 
+                    et=ExpenseTarget.objects.get(plan_type=row[0].strip(), expenseCategory_id=ec.id, yr_m=row[2].strip())
+                    if et:
+                        #Record already  exists
+                        print "Expense Target object already  exists" 
+                        errorList.append(row) 
+                except ObjectDoesNotExist:    
+                    #record needs to be inserted into ExpenseTarget
+                    # Insert into pristineList
+                    print "Adding to  rowlist :" 
+                    rowList.append(row)  
+
+        #Iterate rowList and insert into DB
+    for validRow in rowList:    
+        print "Saving records to DB: " 
+        target=ExpenseTarget( plan_type = validRow[0].strip(),  expenseCategory=ExpenseCategory(ec.id ), yr_m = validRow[2].strip(), amount=validRow[3], user=validRow[4] ) 
+        target.save()  
+    if len(rowList)> 0:
+        print "Printing RowList:" 
+        messages.success( request, "File uploaded successfully. Number of records uploaded:  " + str( len(rowList))  ) 
+    if len(errorList) > 0:
+        print "Printing ErrorList" 
+        messages.error( request, str(len(errorList))  +  " Records did not load. Please correct "  ) 
+    #return HttpResponseRedirect(reverse(upload_target)) 
+    return render(request, 'upload_target.html', {'form':form}   )

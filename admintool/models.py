@@ -42,4 +42,15 @@ class Expense(models.Model):
 
     def __unicode__(self):
         return "Expense " + str(self.expense_date)+ " Amount = " + str(self.amount_spent)
+
+class ExpenseTarget(models.Model):
+    plan_type = models.CharField(max_length=25)
+    expenseCategory = models.ForeignKey( ExpenseCategory )
+    yr_m = models.CharField( max_length=10 )
+    amount = models.DecimalField( max_digits=10, decimal_places=2 )
+    user=models.CharField( max_length=25) 
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now_add=True)
   
+    def __unicode__(self):
+        return "Expense Target " +  plan_type +  " Year month " + yr_m +  " Amount = " + str(self.amount)  
