@@ -13,18 +13,7 @@ from admintool.models import ExpenseCategory, ExpenseType, VendorType, Expense, 
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 
-# Create your views here.
-#Delete This too
 
-def admin_view(request):
-    return HttpResponse('<html><body>Admin Tool!</body></html>')
-
-# This is a test view. Can be deleted.
-
-def time_display(request):
-    t = loader.get_template('time.html')
-    c = Context({'current_time':datetime.now(),})
-    return HttpResponse(t.render(c))
 
 # Returns all expenses ordered by updated on
 
