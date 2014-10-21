@@ -1,30 +1,176 @@
 {% extends 'base.html' %}
 
 {% block title %}
-<h1> Expense Incurred </h1>
+<h1> Expenses Detail </h1>
+{% endblock %}
+
+   {% block customjsfunctions %}
+    $(function() {
+       $( "#id_expense_date" ).datepicker({dateFormat:'M dd, yy'});
+  });
+
+  $(document).ready(function(){
+   alert('Into  document.ready')
+     $("#errorDiv").dialog({autoOpen:false,bgiframe:true,
+                            closeOnEscape:true, title:'Application Error',
+                            buttons:{"Ok": function() { $(this).dialog("close");}}});
+     $("#messageDiv").dialog({autoOpen:false,bgiframe:true,
+                            closeOnEscape:true, title:'Application Message',
+                            buttons:{"Ok": function() { $(this).dialog("close");}}});
+
+//     var form  = $('#add_expense_form');
+//     var submit = $('#submit');
+//     form.on('submit', function(e) {
+//        e.preventDefault(); 
+
+   // $(":button").click(function(){
+      $(".graybtn").click(function(){
+//       alert($(this).attr('id'));
+       var id  =  $(this).attr('id');
+       var res = id.split("_")
+       var oper = res[0];
+       var key = res[1];
+
+       if ( oper == "up") { // Update Record 
+            
+            var newDateSpent = $("#id_expense_date_"+key).val()
+            var newCategory = $("#id_expenseCategory_"+key).val()
+            var newAmount = $("#id_amount_"+key).val()
+            var newPaymentType = $("#id_expense_type_"+key).val()
+            var newVendor = $("#id_vendor_type_"+key).val()
+
+            
+            alert('date spent up' +id +newDateSpent+ newCategory + newAmount +
+            newPaymentType + newVendor)
+
+            jQuery.post( "expenses/update/", 
+                     {"id":key, 
+                      "expense_date":newDateSpent,
+                      "expenseCategory":newCategory,
+                      "amount_spent":newAmount,
+                      "expenseType":newPaymentType,
+                      "vendorType":newVendor},
+                      function(response){
+                        if(response.substring(0,5) == "Error"){
+                            $("#errorBody").html(response);
+                            $("#errorDiv").dialog("open");
+                        }
+                        else{
+                            $("#tr_"+key).effect("highlight",{color:"green"}, 6000);
+                            //var col = $(".graybtn").parent().get(0);
+                            //var row = $(col).parent("tr");
+                            //row.css("foreground-color":"green")
+                           $("#messageBody").html(response);
+                            $("#messageDiv").dialog("open");
+                        }//else close
+                      }//function response
+                      ) //post update
+                      
+} else if (oper == "dl"  )  { // Delete Record 
+         var delPrompt = confirm("Are you sure you  want to  delete this Expense record?");
+         if(delPrompt){
+         jQuery.post('expenses/delete/', 
+                      {"id":key },
+                      function(response){
+                       if(response.substring(0,5) == "Error" ){  
+                         $("#errorBody").html(response);
+                         $("#errorDiv").dialog("open");
+                      }else{
+                         var col  = $(".graybtn").parent().get(0);
+                         var row = $(col).parent("tr");
+                         row.remove();
+                         $("#messageBody").html(response);
+                         $("#messageDiv").dialog("open");
+                      }// end of else   
+
+            } // end of function(response)
+         );// matching with parenthesis before delete_expense
+       } // if(delPrompt) 
+    } // if( oper =="dl") 
+   });
+
+ //  $(":text").click(function(){
+   $(".datepick").click(function(){
+//       alert($(this).attr('id'));
+       var id = $(this).attr('id');
+  //     var idx = "'"+"#"+id+"'"
+      $('#'+id).datepicker({dateFormat:'M dd, yy'});
+  });
+// }); // form.on
+}); //End of document.ready(function)
+
 {% endblock %}
 
 {% block content %}
 
 {% if all_expenses %}
-<table>
+
+<div >
+<table border="1" cellspacing="0" cellpadding="3px"   >
+   <tr><td class="center" colspan="7"  ><b>Expense List </b></td> <tr>
     <tr>
-        <td>Date Spent</td>
-        <td>Category</td>
-        <td>Amount</td>
-        <td>Payment Type</td>
-        <td>Vendor</td>
+        <td align="left"><strong>Date Spent</strong></td>
+        <td align="left"><strong>Category</strong></td>
+        <td align="left"><strong>Amount</strong></td>
+        <td align="left"><strong>Payment Type</strong></td>
+        <td align="left"><strong>Vendor</strong></td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+
     </tr>
 {% for expense in all_expenses %}
-    <tr>
-    <td>{{expense.expense_date}}</td>
-    <td>{{expense.expenseCategory}}</td> 
-    <td>{{expense.expense_amount}}</td>
-    <td>{{expense.expenseType}}</td>
-    <td>{{expense.vendorType}}</td>
-    </tr>
+    <tr id ="tr_{{expense.id}}" value="{{expense.id}}">
+    <td id = "{{expense.id}}" ><input type="text" class="datepick"
+    id="id_expense_date_{{expense.id}}" value="{{expense.expense_date|date:"M d, Y"}}"/></td>
+
+{% if expenseCategory %}
+<td><select id="id_expenseCategory_{{expense.id}}" name="expenseCategory">
+   {% for cat in expenseCategory %}
+       <option value="{{cat.id }}"   {% if cat.id ==  expense.expenseCategory_id %} selected="selected" {% endif %} >  {{cat.category_name }}  </option>
+    {% endfor %} 
+ </select>
+</td>
+{% endif %} 
+    <td><input type="text"  id="id_amount_{{expense.id}}" value="{{expense.amount_spent}}"/></td>
+
+{% if expenseType %}
+    <td><select id="id_expense_type_{{expense.id}}" name="expenseType" >
+     {% for typ in expenseType %}
+        <option value="{{typ.id}}" {% if typ.id == expense.expenseType_id %} selected="selected" {% endif %}> {{typ.type_name }} </option>
+    {% endfor %}
+  </select>
+ </td>
+{% endif %} 
+
+
+{% if vendorType %}
+    <td><select id="id_vendor_type_{{expense.id}}" name="vendorType" >
+    {% for vtyp in vendorType %} 
+       <option value="{{vtyp.id }}" {% if vtyp.id == expense.vendorType_id %} selected="selected" {% endif %}> {{vtyp.vendor_name}} </option>
+    {% endfor %}
+   </select>
+   </td>
+ {% endif %}
+
+  <td><input name="Button" class="graybtn"  id="up_{{expense.id}}" type="button"  value="Update"/></td>
+  <td><input name="Button" class="graybtn"  id="dl_{{expense.id}}" type="button"  value="Delete"/></td>
+
+ 
+ </tr>
 {% endfor %}
 </table>
+</div>
+ <div id="errorDiv">
+    <span id="errorBody"></span>
+ </div>
+
+ <div id="messageDiv">
+   <span id="messageBody"</span> 
+ </div>
+
+<br />
+
+
 {% endif %}
 
 {% endblock %}

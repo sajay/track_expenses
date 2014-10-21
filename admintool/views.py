@@ -11,8 +11,10 @@ import csv
 from admintool.forms import ExpenseForm, UploadFileForm
 from admintool.models import ExpenseCategory, ExpenseType, VendorType, Expense, ExpenseTarget
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
+#Delete This too
 
 def admin_view(request):
     return HttpResponse('<html><body>Admin Tool!</body></html>')
@@ -29,8 +31,12 @@ def time_display(request):
 @login_required(login_url='/login')
 def index(request):
     all_expenses = Expense.objects.filter(created_by=request.user).order_by('updated_on')
+    expenseCategory = ExpenseCategory.objects.all()
+    expenseType = ExpenseType.objects.all()
+    vendorType = VendorType.objects.all()
+ 
     t = loader.get_template('admintool/index.html')
-    c = Context({'all_expenses':all_expenses,})
+    c = Context({'all_expenses':all_expenses,'expenseCategory':expenseCategory, 'expenseType':expenseType,'vendorType':vendorType })
     return HttpResponse(t.render(c))
 
 
@@ -47,13 +53,13 @@ def add_expense(request):
             expenseCategory = ExpenseCategory.objects.all()
             expenseType = ExpenseType.objects.all()
             vendorType = VendorType.objects.all()
-            return render( request,  'add_expense.html' ,{'form':form, 'all_expenses':all_expenses, 'expenseCategory':expenseCategory, 'expenseType':expenseType, 'vendorType':vendorType} )  
+            return render( request,  'admintool/add_expense.html' ,{'form':form, 'all_expenses':all_expenses, 'expenseCategory':expenseCategory, 'expenseType':expenseType, 'vendorType':vendorType} )  
         else:
             print form.errors
     else:
         form1=ExpenseForm()
 
-    return render(request, 'add_expense.html' , {'errors':errors} )
+    return render(request, 'admintool/add_expense.html' , {'errors':errors} )
 
 @login_required(login_url='/login')
 
@@ -63,7 +69,7 @@ def save_expense(request):
         form=ExpenseForm(request.POST)
     else:
         form = ExpenseForm()
-        return render (request, 'add_expense.html', {'form':form})
+        return render (request, 'admintool/add_expense.html', {'form':form})
    
     expenseCategory = request.POST["expenseCategory"]
     expenseType = request.POST["expenseType"]
@@ -98,14 +104,15 @@ def save_expense(request):
 
     ec.save()
     messages.success( request, "Form data was saved successfully." )
-    return HttpResponseRedirect(reverse(add_expense)) 
+    return HttpResponseRedirect(reverse(index)) 
 
 
 
 @login_required(login_url='/login')
-
+@csrf_exempt
 def update_expense(request):
-   
+  
+    print "In Update"
     id = request.POST["id"]
     expenseCategory = request.POST["expenseCategory"]
     expenseType = request.POST["expenseType"]
@@ -138,6 +145,7 @@ def update_expense(request):
     return HttpResponse("Success, Expense Record has been updated successfully.")
 
 @login_required(login_url='/login')
+@csrf_exempt
 def delete_expense(request):
     print "Into delete_expense"
     id = request.POST["id"]
