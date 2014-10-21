@@ -152,7 +152,7 @@ def upload_target(request):
     print "Into upload target"
     if request.method == "GET":
         print "Method is Get, Return back."
-        return render (request, 'upload_target.html')
+        return render (request, 'admintool/upload_target.html')
     if request.method == "POST":
         print "Method is POST, process csv file:" 
         form=UploadFileForm(request.POST, request.FILES) 
@@ -177,7 +177,8 @@ def upload_target(request):
                     break  # Get out of the else block.
                 print "ec.id is :" + str(ec.id  ) 
                 try:
-                    # Check whether the record has already been uploaded. 
+                    # Check whether the record has already been uploaded.
+                    #Check w Nix on what this does: error -get() returned more than one ExpenseTarget -- it returned 2!
                     et=ExpenseTarget.objects.get(plan_type=row[0].strip(), expenseCategory_id=ec.id, yr_m=row[2].strip())
                     if et:
                         #Record already  exists

@@ -9,7 +9,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$',include('admintool.urls')),
     url(r'^expenses/', include('admintool.urls')),
-    url(r'^upload_target/$', 'admintool.views.upload_target'),
+#    url(r'^upload_target/$', 'admintool.views.upload_target'),
     url(r'^login/$', 'django.contrib.auth.views.login'),
     url(r'^logout/$', 'django.contrib.auth.views.logout'),
 )

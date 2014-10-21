@@ -7,5 +7,6 @@ urlpatterns = patterns('admintool.views',
     url(r'^save/$', views.save_expense, name = 'save_expense'),
     url(r'^delete/$', views.delete_expense, name = 'delete_expense'),
     url(r'^update/$', views.update_expense, name = 'update_expense'),
+    url(r'^upload/$', views.upload_target, name = 'upload_expense_csv'),
    
 )
