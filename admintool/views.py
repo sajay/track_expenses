@@ -202,4 +202,4 @@ def upload_target(request):
         print "Printing ErrorList" 
         messages.error( request, str(len(errorList))  +  " Records did not load. Please correct "  ) 
     #return HttpResponseRedirect(reverse(upload_target)) 
-    return render(request, 'upload_target.html', {'form':form}   )
+    return render(request, 'admintool/upload_target.html', {'form':form}   )
