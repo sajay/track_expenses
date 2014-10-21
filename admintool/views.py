@@ -70,17 +70,17 @@ def save_expense(request):
     if len(expense_date) == 0  and len(amount_spent) == 0:
         messages.error(request, "Expense Date is a required field:" )
         messages.error(request, "Amount Spent is a required field:" )
-        return render(request, 'add_expense.html', {'form':form}) 
+        return render(request, 'admintool/add_expense.html', {'form':form}) 
     if len(expense_date) == 0:
         print "Into  expense_date is  None" 
         messages.error(request, "Expense Date is a required field:") 
-        return render( request, 'add_expense.html', {'form':form})
+        return render( request, 'admintool/add_expense.html', {'form':form})
     if len(amount_spent) == 0:  
         messages.error(request, "Amount Spent is a required field:" )
-        return render( request, 'add_expense.html', {'form':form})
+        return render( request, 'admintool/add_expense.html', {'form':form})
     if float(amount_spent) <=  0:
         messages.error(request, "Amount spent must be greater than zero") 
-        return render( request, 'add_expense.html', {'form':form})
+        return render( request, 'admintool/add_expense.html', {'form':form})
 
     datetime.datetime.strptime(expense_date,'%b %d, %Y')  
     ec=Expense(expenseCategory = ExpenseCategory(expenseCategory),
