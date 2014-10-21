@@ -16,7 +16,7 @@
     {% block title %} Add Expenses {% endblock %}
  
       <div>
-        <form id="add_expense_form" method="post" action="/expenses/save/" >
+        <form id="add_expense_form" method="post" action={%url 'save_expense' %} >
         {% csrf_token  %}
         <table>
            <tr><td class="center" colspan="2"><b>Add new Expense:</b></td> </tr>
