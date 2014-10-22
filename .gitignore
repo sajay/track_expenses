@@ -11,3 +11,6 @@ env
 
 #ignore DB.sqlite file. This project uses MySQL
 db.sqlite3
+
+#ignore the csv files
+*.csv

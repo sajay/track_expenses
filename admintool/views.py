@@ -11,26 +11,21 @@ import csv
 from admintool.forms import ExpenseForm, UploadFileForm
 from admintool.models import ExpenseCategory, ExpenseType, VendorType, Expense, ExpenseTarget
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 
-# Create your views here.
 
-def admin_view(request):
-    return HttpResponse('<html><body>Admin Tool!</body></html>')
-
-# This is a test view. Can be deleted.
-
-def time_display(request):
-    t = loader.get_template('time.html')
-    c = Context({'current_time':datetime.now(),})
-    return HttpResponse(t.render(c))
 
 # Returns all expenses ordered by updated on
 
 @login_required(login_url='/login')
 def index(request):
     all_expenses = Expense.objects.filter(created_by=request.user).order_by('updated_on')
+    expenseCategory = ExpenseCategory.objects.all()
+    expenseType = ExpenseType.objects.all()
+    vendorType = VendorType.objects.all()
+ 
     t = loader.get_template('admintool/index.html')
-    c = Context({'all_expenses':all_expenses,})
+    c = Context({'all_expenses':all_expenses,'expenseCategory':expenseCategory, 'expenseType':expenseType,'vendorType':vendorType })
     return HttpResponse(t.render(c))
 
 
@@ -47,13 +42,13 @@ def add_expense(request):
             expenseCategory = ExpenseCategory.objects.all()
             expenseType = ExpenseType.objects.all()
             vendorType = VendorType.objects.all()
-            return render( request,  'add_expense.html' ,{'form':form, 'all_expenses':all_expenses, 'expenseCategory':expenseCategory, 'expenseType':expenseType, 'vendorType':vendorType} )  
+            return render( request,  'admintool/add_expense.html' ,{'form':form, 'all_expenses':all_expenses, 'expenseCategory':expenseCategory, 'expenseType':expenseType, 'vendorType':vendorType} )  
         else:
             print form.errors
     else:
         form1=ExpenseForm()
 
-    return render(request, 'add_expense.html' , {'errors':errors} )
+    return render(request, 'admintool/add_expense.html' , {'errors':errors} )
 
 @login_required(login_url='/login')
 
@@ -63,7 +58,7 @@ def save_expense(request):
         form=ExpenseForm(request.POST)
     else:
         form = ExpenseForm()
-        return render (request, 'add_expense.html', {'form':form})
+        return render (request, 'admintool/add_expense.html', {'form':form})
    
     expenseCategory = request.POST["expenseCategory"]
     expenseType = request.POST["expenseType"]
@@ -75,17 +70,17 @@ def save_expense(request):
     if len(expense_date) == 0  and len(amount_spent) == 0:
         messages.error(request, "Expense Date is a required field:" )
         messages.error(request, "Amount Spent is a required field:" )
-        return render(request, 'add_expense.html', {'form':form}) 
+        return render(request, 'admintool/add_expense.html', {'form':form}) 
     if len(expense_date) == 0:
         print "Into  expense_date is  None" 
         messages.error(request, "Expense Date is a required field:") 
-        return render( request, 'add_expense.html', {'form':form})
+        return render( request, 'admintool/add_expense.html', {'form':form})
     if len(amount_spent) == 0:  
         messages.error(request, "Amount Spent is a required field:" )
-        return render( request, 'add_expense.html', {'form':form})
+        return render( request, 'admintool/add_expense.html', {'form':form})
     if float(amount_spent) <=  0:
         messages.error(request, "Amount spent must be greater than zero") 
-        return render( request, 'add_expense.html', {'form':form})
+        return render( request, 'admintool/add_expense.html', {'form':form})
 
     datetime.datetime.strptime(expense_date,'%b %d, %Y')  
     ec=Expense(expenseCategory = ExpenseCategory(expenseCategory),
@@ -98,14 +93,15 @@ def save_expense(request):
 
     ec.save()
     messages.success( request, "Form data was saved successfully." )
-    return HttpResponseRedirect(reverse(add_expense)) 
+    return HttpResponseRedirect(reverse(index)) 
 
 
 
 @login_required(login_url='/login')
-
+@csrf_exempt
 def update_expense(request):
-   
+  
+    print "In Update"
     id = request.POST["id"]
     expenseCategory = request.POST["expenseCategory"]
     expenseType = request.POST["expenseType"]
@@ -138,6 +134,7 @@ def update_expense(request):
     return HttpResponse("Success, Expense Record has been updated successfully.")
 
 @login_required(login_url='/login')
+@csrf_exempt
 def delete_expense(request):
     print "Into delete_expense"
     id = request.POST["id"]
@@ -155,7 +152,7 @@ def upload_target(request):
     print "Into upload target"
     if request.method == "GET":
         print "Method is Get, Return back."
-        return render (request, 'upload_target.html')
+        return render (request, 'admintool/upload_target.html')
     if request.method == "POST":
         print "Method is POST, process csv file:" 
         form=UploadFileForm(request.POST, request.FILES) 
@@ -180,7 +177,8 @@ def upload_target(request):
                     break  # Get out of the else block.
                 print "ec.id is :" + str(ec.id  ) 
                 try:
-                    # Check whether the record has already been uploaded. 
+                    # Check whether the record has already been uploaded.
+                    #Check w Nix on what this does: error -get() returned more than one ExpenseTarget -- it returned 2!
                     et=ExpenseTarget.objects.get(plan_type=row[0].strip(), expenseCategory_id=ec.id, yr_m=row[2].strip())
                     if et:
                         #Record already  exists
@@ -204,4 +202,4 @@ def upload_target(request):
         print "Printing ErrorList" 
         messages.error( request, str(len(errorList))  +  " Records did not load. Please correct "  ) 
     #return HttpResponseRedirect(reverse(upload_target)) 
-    return render(request, 'upload_target.html', {'form':form}   )
+    return render(request, 'admintool/upload_target.html', {'form':form}   )

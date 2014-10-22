@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+   {% block customjsfunctions %}
+    $(function() {
+       $( "#id_expense_date" ).datepicker({dateFormat:'M dd, yy'});
+  });
+  {% endblock %}
+ {% block content %}
+
+    {% if messages %} 
+      {% for message in messages %}
+      
+      <p>   {{ message }} </p>
+      {% endfor  %}
+    {% endif %}
+    
+    {% block title %} Add Expenses {% endblock %}
+ 
+      <div>
+        <form id="add_expense_form" method="post" action={%url 'save_expense' %} >
+        {% csrf_token  %}
+        <table>
+           <tr><td class="center" colspan="2"><b>Add new Expense:</b></td> </tr>
+            {% for field in form %}
+                <tr>
+                    <td> {{ field.label_tag }}</td><td> {{ field }}</td>  
+            {% endfor %}
+                </tr>
+        </table>
+            <input type ="submit" id="submit"  name="Add Expense"  value="Submit"  />
+       
+        </form>
+      </div>
+<br>
+    
+
+{% endblock %}
