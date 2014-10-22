@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}
-<h1> Expenses Detail </h1>
-{% endblock %}
+
 
    {% block customjsfunctions %}
     $(function() {
@@ -101,13 +99,17 @@
 
 {% endblock %}
 
+{% block title %}
+<h1> Expenses List </h1>
+{% endblock %}
+
 {% block content %}
 
 {% if all_expenses %}
 
 <div >
 <table border="1" cellspacing="0" cellpadding="3px"   >
-   <tr><td class="center" colspan="7"  ><b>Expense List </b></td> <tr>
+   <tr><td class="center" colspan="7"  ><b>Your Expenses</b></td> <tr>
     <tr>
         <td align="left"><strong>Date Spent</strong></td>
         <td align="left"><strong>Category</strong></td>
