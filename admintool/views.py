@@ -38,11 +38,8 @@ def add_expense(request):
         form = ExpenseForm(request.GET)
 
         if form.is_valid():
-            all_expenses = Expense.objects.filter(created_by=request.user).order_by('updated_on')
-            expenseCategory = ExpenseCategory.objects.all()
-            expenseType = ExpenseType.objects.all()
-            vendorType = VendorType.objects.all()
-            return render( request,  'admintool/add_expense.html' ,{'form':form, 'all_expenses':all_expenses, 'expenseCategory':expenseCategory, 'expenseType':expenseType, 'vendorType':vendorType} )  
+            #return render( request,  'admintool/add_expense.html' ,{'form':form, 'all_expenses':all_expenses, 'expenseCategory':expenseCategory, 'expenseType':expenseType, 'vendorType':vendorType} )             
+            return render( request,  'admintool/add_expense.html' ,{'form':form,} )  
         else:
             print form.errors
     else:
@@ -155,16 +152,20 @@ def upload_target(request):
         return render (request, 'admintool/upload_target.html')
     if request.method == "POST":
         print "Method is POST, process csv file:" 
+        
+        # if the file is not uploaded
+        if not request.FILES:
+            messages.error(request, "Please choose a file to upload:")
+            form = UploadFileForm()
+            return render( request, 'admintool/upload_target.html', {'form':form})
         form=UploadFileForm(request.POST, request.FILES) 
         rowList= []
         errorList=[]
         file=request.FILES['targetfile']
-       # if file is None :
-       #     messages.error(request, "Please choose a file to upload:") ) 
-       #     return render( request, 'upload_target.html', {'form':form})
         dataReader=csv.reader(file.read().splitlines())
         for row in dataReader:
             print "Into for loop :" 
+            # Empty or incomplete file
             if len(row[0])==0 or len(row[1])==0 or len(row[2])==0 or len(row[3])==0 or len(row[4]) == 0 :
                errorList.append(row)
             # Get expenseCategory_id from the ExpenseCategory value.
@@ -178,7 +179,6 @@ def upload_target(request):
                 print "ec.id is :" + str(ec.id  ) 
                 try:
                     # Check whether the record has already been uploaded.
-                    #Check w Nix on what this does: error -get() returned more than one ExpenseTarget -- it returned 2!
                     et=ExpenseTarget.objects.get(plan_type=row[0].strip(), expenseCategory_id=ec.id, yr_m=row[2].strip())
                     if et:
                         #Record already  exists
@@ -189,7 +189,10 @@ def upload_target(request):
                     # Insert into pristineList
                     print "Adding to  rowlist :" 
                     rowList.append(row)  
-
+                except MultipleObjectsReturned:
+                    #if dupes exist
+                    print "Adding to errorList"
+                    errorList.append(row)
         #Iterate rowList and insert into DB
     for validRow in rowList:    
         print "Saving records to DB: " 
