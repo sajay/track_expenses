@@ -38,11 +38,8 @@ def add_expense(request):
         form = ExpenseForm(request.GET)
 
         if form.is_valid():
-            all_expenses = Expense.objects.filter(created_by=request.user).order_by('updated_on')
-            expenseCategory = ExpenseCategory.objects.all()
-            expenseType = ExpenseType.objects.all()
-            vendorType = VendorType.objects.all()
-            return render( request,  'admintool/add_expense.html' ,{'form':form, 'all_expenses':all_expenses, 'expenseCategory':expenseCategory, 'expenseType':expenseType, 'vendorType':vendorType} )  
+            #return render( request,  'admintool/add_expense.html' ,{'form':form, 'all_expenses':all_expenses, 'expenseCategory':expenseCategory, 'expenseType':expenseType, 'vendorType':vendorType} )             
+            return render( request,  'admintool/add_expense.html' ,{'form':form,} )  
         else:
             print form.errors
     else:
