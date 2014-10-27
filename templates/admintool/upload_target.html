@@ -1,14 +1,17 @@
 {%extends "base.html" %}
 
+
+
+
+{% block content  %}
+
     {% if messages %} 
       {% for message in messages %}
           <p>   {{ message }} </p>
       {% endfor  %}
     {% endif %}
-
-
-{% block content  %}
-     <table border="1" cellspacing="0" cellpadding="3px">
+    
+    <table border="1" cellspacing="0" cellpadding="3px">
        <tr><td align="center"<strong><b>Upload Targets</b></strong></td></tr>
        <tr><td>
           <p style="width:500px">Upload Target/Forecast csv file here. The data 
@@ -25,3 +28,4 @@
     <strong>Please be patient. This process may  take a few seconds depending on the number of records.</strong><br/>
    </font> 
 {% endblock %}
+
