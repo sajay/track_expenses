@@ -14,3 +14,6 @@ db.sqlite3
 
 #ignore the csv files
 *.csv
+
+#ignore the log files generated
+*.log
