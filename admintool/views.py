@@ -8,7 +8,7 @@ from django.http import HttpResponse, HttpResponseNotFound,HttpResponseRedirect
 from django.core.urlresolvers import reverse
 import datetime 
 import csv
-from admintool.forms import ExpenseForm, UploadFileForm
+from admintool.forms import ExpenseForm
 from admintool.models import ExpenseCategory, ExpenseType, VendorType, Expense, ExpenseTarget
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
@@ -156,9 +156,7 @@ def upload_target(request):
         # if the file is not uploaded
         if not request.FILES:
             messages.error(request, "Please choose a file to upload:")
-            form = UploadFileForm()
-            return render( request, 'admintool/upload_target.html', {'form':form})
-        form=UploadFileForm(request.POST, request.FILES) 
+            return render( request, 'admintool/upload_target.html',)
         rowList= []
         errorList=[]
         file=request.FILES['targetfile']
@@ -205,4 +203,4 @@ def upload_target(request):
         print "Printing ErrorList" 
         messages.error( request, str(len(errorList))  +  " Records did not load. Please correct "  ) 
     #return HttpResponseRedirect(reverse(upload_target)) 
-    return render(request, 'admintool/upload_target.html', {'form':form}   )
+    return render(request, 'admintool/upload_target.html',   )
