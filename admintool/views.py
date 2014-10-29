@@ -9,14 +9,16 @@ from django.core.urlresolvers import reverse
 import datetime 
 import csv
 from admintool.forms import ExpenseForm
+import logging 
+from admintool.forms import ExpenseForm
 from admintool.models import ExpenseCategory, ExpenseType, VendorType, Expense, ExpenseTarget
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 
 
+logger=logging.getLogger(__name__)
 
 # Returns all expenses ordered by updated on
-
 @login_required(login_url='/login')
 def index(request):
     all_expenses = Expense.objects.filter(created_by=request.user).order_by('updated_on')
@@ -28,9 +30,17 @@ def index(request):
     c = Context({'all_expenses':all_expenses,'expenseCategory':expenseCategory, 'expenseType':expenseType,'vendorType':vendorType })
     return HttpResponse(t.render(c))
 
+# I  have written the two methods below to test the logging from the Django Shell. We can remove these after we have a grip on the logging framework.
+def test_logging():
+    print("name is : " + __name__)
+    logger.debug("Test Logging, This is a debug message:" ) 
+
+def test_logging_v1():
+    logger.info( "Test Logging This is a info message:" ) 
 
 @login_required(login_url='/login')
 def add_expense(request):
+    logger.info("Into add_expense():" )
     errors =[]
     context = RequestContext(request)
  
@@ -50,6 +60,7 @@ def add_expense(request):
 @login_required(login_url='/login')
 
 def save_expense(request):
+    logger.info("Into save_expense:" ) 
     errors=[]
     if request.method == "POST":
         form=ExpenseForm(request.POST)
@@ -99,6 +110,7 @@ def save_expense(request):
 def update_expense(request):
   
     print "In Update"
+    logger.info("Into update_expense() :" ) 
     id = request.POST["id"]
     expenseCategory = request.POST["expenseCategory"]
     expenseType = request.POST["expenseType"]
@@ -134,6 +146,7 @@ def update_expense(request):
 @csrf_exempt
 def delete_expense(request):
     print "Into delete_expense"
+    logger.info("Into delete_expense() :" ) 
     id = request.POST["id"]
     print "Deleted Record is :" 
     print id
@@ -146,13 +159,16 @@ def delete_expense(request):
 
 @login_required(login_url='/login')
 def upload_target(request):
+    logger.info("Into upload_target() :" ) 
     print "Into upload target"
+    logger.info ("Into upload_target:" ) 
     if request.method == "GET":
         print "Method is Get, Return back."
+        logger.info("Into Method Get, Return back." )
         return render (request, 'admintool/upload_target.html')
     if request.method == "POST":
         print "Method is POST, process csv file:" 
-        
+        logger.info("Into method Post, process csv File:" ) 
         # if the file is not uploaded
         if not request.FILES:
             messages.error(request, "Please choose a file to upload:")
