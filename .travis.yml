@@ -18,7 +18,7 @@ before_script:
    - mysql -e 'create database IF NOT EXISTS expenses_db;' -uroot
    #- mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'sanix'@'localhost' IDENTIFIED BY 'pyp@ss';" 
    - mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost';" -uroot
-   - python manage.py migrate
+   - python manage.py migrate --settings=track_expenses.settings.test
 
  
 script:
