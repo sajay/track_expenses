@@ -22,7 +22,7 @@ before_script:
 
  
 script:
-    - python manage.py test
+    - python manage.py test --settings=track_expenses.settings.test
 
 notifications:
     email:

@@ -1,5 +1,9 @@
 """
+This file settings/base.py has the settings that are common to all instances of
+the project.
+
 Django settings for track_expenses project.
+
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.7/topics/settings/
@@ -10,7 +14,8 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
@@ -19,10 +24,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'b#wxrs2$cpt85_dme)5*nit(&n0w%rq83k)(deuug&rnt(gi!z'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-TEMPLATE_DEBUG = True
+# False by default in base.py
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = False
+
+TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = []
 
@@ -67,11 +74,16 @@ WSGI_APPLICATION = 'track_expenses.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE':'django.db.backends.mysql',
-        'NAME':'expenses_db',
-        'USER':'root',
+        'NAME': '',
+        'USER':'',
         'PASSWORD':'',
-        'HOST':'127.0.0.1',
-        'PORT':'3306',
+        'HOST':'',
+        'PORT':'',
+#        'NAME':'expenses_db',
+#        'USER':'root',
+#        'PASSWORD':'',
+#        'HOST':'127.0.0.1',
+#        'PORT':'3306',
     },
 #    'development': {
 #        'ENGINE':'django.db.backends.mysql',
