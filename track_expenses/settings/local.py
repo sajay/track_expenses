@@ -1,5 +1,6 @@
 """Development settings and globals."""
 from __future__ import absolute_import
+import os
 from os.path import join, normpath
 from .base import *
 
@@ -9,6 +10,9 @@ DEBUG = True
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-debug
 TEMPLATE_DEBUG = DEBUG
 ########## END DEBUG CONFIGURATION
+
+
+SECRET_KEY = os.environ["EXPENSES_SECRET_KEY"]
 
 ########## DATABASE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
