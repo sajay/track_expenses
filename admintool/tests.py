@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from admintool import views
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import resolve
-
+from django.views.generic import TemplateView
 #from models import Expense
 #from datetime import date
 
@@ -23,7 +23,25 @@ class AdminToolTests(TestCase):
             username='testuser', email='testuser@test', password='secret')
 
 
-    def test_root_resolves_to_main_view(self):
+    def test_root_url_resolves_to_home_page(self):
+        home = resolve('/')
+
+        # Setup name.
+        name = 'home'
+        # Setup request and view.
+        request = self.factory.get('/')
+        view = TemplateView.as_view(template_name='homepage.html')
+        # Run.
+        response = view(request,name=name)
+        # Check.
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.template_name[0], 'homepage.html')
+        self.assertEqual(response.context_data['name'], name)
+
+
+
+
+    def test_expenses_resolves_to_main_expenses_list(self):
         main_page = resolve('/expenses/')
         self.assertEqual(main_page.func, views.index)
 
@@ -33,18 +51,18 @@ class AdminToolTests(TestCase):
         resp = views.index(request)
         self.assertEquals(resp.status_code, 200)
 
-    
+
     def test_uses_index_html_template(self):
         request = self.factory.get('/expenses/')
         request.user = self.user
-        
-        #Make sure it has a session associated
-        request.session = {} 
 
-        
+        #Make sure it has a session associated
+        request.session = {}
+
+
         #Call the view function
         response = views.index(request)
-        
+
         #assertions
         self.assertContains(response, "<h1> Expenses List </h1>")
 
@@ -70,10 +88,10 @@ class AdminToolTests(TestCase):
         request = self.factory.get('/expenses/add/')
         request.user = self.user
         request.session = {}
-        
+
         #call the view
         response = views.add_expense(request)
-        
+
         #assertions
         self.assertContains(response, "Add Expenses")
 
