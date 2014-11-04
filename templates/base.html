@@ -76,12 +76,12 @@
     
     <div class="top">
         {% if user.is_anonymous %}
-            <a href="{% url 'django.contrib.auth.views.login' %}">Login</a>
+            <a href="{% url 'django.contrib.auth.views.login' %}" id="login_link_id"> Login </a>
         {% else %}
           <table >
             <tr valign="middle">
               <td align="right">User:&nbsp; {{ user }}</td>
-              <td align="right"> <a href="{% url 'django.contrib.auth.views.logout' %}">&nbsp;&nbsp;Logout</a></td>
+              <td align="right"> <a href="{% url 'django.contrib.auth.views.logout' %}" id="logout_link_id">Logout</a></td>
            </tr>
         </table>
         {% endif %}
