@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.support.ui import Select
 import unittest
 
 
@@ -48,6 +49,58 @@ class NewUserTest(unittest.TestCase):
         login_button = self.browser.find_element_by_id("login_button_id")
         login_button.click()
         self.assertIn('Expenses List', self.browser.title)
+
+    def test_login_and_add_expense(self):
+        self.browser.get('http://localhost:8000')
+        manage_expense_link = self.browser.find_element_by_id('manage_expense_link_id')
+        login_link = self.browser.find_element_by_id('login_link_id')
+        
+        manage_expense_link.click()
+        username_field = self.browser.find_element_by_id('id_username')
+        password_field = self.browser.find_element_by_id('id_password')
+        
+        username_field.send_keys("nikhil")
+        password_field.send_keys("password")
+
+        login_button = self.browser.find_element_by_id("login_button_id")
+        login_button.click()
+        
+        add_expense_link =self.browser.find_element_by_id("add_expense_link_id")
+        add_expense_link.click()
+        self.assertIn('Add Expenses', self.browser.title)
+        
+
+        expense_category_select = Select(self.browser.find_element_by_id('id_expenseCategory'))
+
+        selected_category = expense_category_select.options[3].text
+        expense_category_select.select_by_visible_text(selected_category)
+
+        #print [o.text for o in expense_category_select.options]
+        
+
+        expense_type_select = Select(self.browser.find_element_by_id('id_expenseType'))
+        expense_type_select.select_by_visible_text(expense_type_select.options[0].text)
+
+        
+        vendor_type_select = Select(self.browser.find_element_by_id('id_vendorType'))
+        vendor_type_select.select_by_visible_text(vendor_type_select.options[0].text)
+        
+        expense_date_field = self.browser.find_element_by_id("id_expense_date")
+        expense_date_field.send_keys("Apr 01, 2014")
+
+        amount_spent_field = self.browser.find_element_by_id("id_amount_spent")
+        amount_spent_field.send_keys("10")
+
+        comments_field = self.browser.find_element_by_id("id_comments")
+        comments_field.send_keys("This is a comment for the Functional Test expense.") 
+        self.browser.implicitly_wait(6)
+
+        add_button = self.browser.find_element_by_id("add_button_id")
+        add_button.click()
+        self.assertIn('Expenses List', self.browser.title)
+
+
+
 
 
 # This is the simplest way to run this test

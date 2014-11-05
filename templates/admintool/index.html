@@ -99,11 +99,18 @@
 
 {% endblock %}
 
-{% block title %}
-<h1> Expenses List </h1>
-{% endblock %}
+
 
 {% block content %}
+
+    {% if messages %} 
+      {% for message in messages %}
+      <p>   {{ message }} </p>
+      {% endfor  %}
+    {% endif %}
+
+
+{% block title %}<h1> Expenses List </h1>{% endblock %}
 
 {% if all_expenses %}
 
@@ -180,7 +187,7 @@
    <tr>
     <td >
      <ul>
-        <li><a href="{% url 'add_expense' %}"> Add Expense</a></li>
+        <li><a href="{% url 'add_expense' %}" id="add_expense_link_id"> Add Expense</a></li>
         <li><a href="{% url 'upload_expense_csv' %}"> Upload Targets</a></li>
      </ul>
      </td>

@@ -74,6 +74,12 @@ def save_expense(request):
     expense_date = request.POST["expense_date"]
     amount_spent = request.POST["amount_spent"] 
     comments = request.POST["comments"]
+    print ("Category is " + expenseCategory)
+    print (expenseType)
+    print(vendorType)
+    print(expense_date)
+    print(amount_spent)
+    print(comments)
     
     if len(expense_date) == 0  and len(amount_spent) == 0:
         messages.error(request, "Expense Date is a required field:" )
@@ -90,7 +96,9 @@ def save_expense(request):
         messages.error(request, "Amount spent must be greater than zero") 
         return render( request, 'admintool/add_expense.html', {'form':form})
 
-    datetime.datetime.strptime(expense_date,'%b %d, %Y')  
+    print ("passed validations")
+    datetime.datetime.strptime(expense_date,'%b %d, %Y')
+    print ("stripped date")
     ec=Expense(expenseCategory = ExpenseCategory(expenseCategory),
                expenseType = ExpenseType(expenseType) ,
                vendorType = VendorType( vendorType),
@@ -98,9 +106,10 @@ def save_expense(request):
                amount_spent = amount_spent , 
                comments = comments ,
                created_by = request.user)
-
+    print("before save expense")
     ec.save()
-    messages.success( request, "Form data was saved successfully." )
+    print("saved expense")
+    messages.success( request, "The Expense was saved successfully." )
     return HttpResponseRedirect(reverse(index)) 
 
 
