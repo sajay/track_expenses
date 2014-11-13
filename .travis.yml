@@ -22,7 +22,8 @@ before_script:
 
  
 script:
-    - python manage.py test --settings=track_expenses.settings.test
+    - python manage.py test admintool --settings=track_expenses.settings.test
+#    - python manage.py test functional_tests --settings=track_expenses.settings.test
 
 notifications:
     email:

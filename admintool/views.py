@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.template import RequestContext
 from django.template import Context,loader
@@ -74,12 +74,6 @@ def save_expense(request):
     expense_date = request.POST["expense_date"]
     amount_spent = request.POST["amount_spent"] 
     comments = request.POST["comments"]
-    print ("Category is " + expenseCategory)
-    print (expenseType)
-    print(vendorType)
-    print(expense_date)
-    print(amount_spent)
-    print(comments)
     
     if len(expense_date) == 0  and len(amount_spent) == 0:
         messages.error(request, "Expense Date is a required field:" )
@@ -96,9 +90,7 @@ def save_expense(request):
         messages.error(request, "Amount spent must be greater than zero") 
         return render( request, 'admintool/add_expense.html', {'form':form})
 
-    print ("passed validations")
     datetime.datetime.strptime(expense_date,'%b %d, %Y')
-    print ("stripped date")
     ec=Expense(expenseCategory = ExpenseCategory(expenseCategory),
                expenseType = ExpenseType(expenseType) ,
                vendorType = VendorType( vendorType),
@@ -106,12 +98,11 @@ def save_expense(request):
                amount_spent = amount_spent , 
                comments = comments ,
                created_by = request.user)
-    print("before save expense")
     ec.save()
-    print("saved expense")
     messages.success( request, "The Expense was saved successfully." )
-    return HttpResponseRedirect(reverse(index)) 
-
+    return redirect('/expenses')
+    #HttpResponseRedirect(reverse(index)) 
+    #return render(request, 'admintool/index.html', {'form':form})
 
 
 @login_required(login_url='/login')

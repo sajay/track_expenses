@@ -1,9 +1,11 @@
+from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
-import unittest
+from selenium.webdriver.common.keys import Keys
+#import unittest
 
 
-class NewUserTest(unittest.TestCase):
+class NewUserTest(LiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Firefox()
@@ -13,14 +15,14 @@ class NewUserTest(unittest.TestCase):
         self.browser.quit()
 
     def test_user_sees_home_page_and_login_link(self):
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
         self.assertIn('Welcome to Track Expenses', self.browser.title)
         self.browser.find_element_by_id('manage_expense_link_id')
         self.browser.find_element_by_id('login_link_id')
 
         
     def test_user_click_login_from_home_page_goes_to_home_page_and_is_logged_in(self):
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
         manage_expense_link = self.browser.find_element_by_id('manage_expense_link_id')
         login_link = self.browser.find_element_by_id('login_link_id')
         
@@ -36,7 +38,7 @@ class NewUserTest(unittest.TestCase):
         self.assertIn('Welcome to Track Expenses', self.browser.title)
 
     def test_user_clicks_manage_expenses_and_sees_expenses_list(self):
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
         manage_expense_link = self.browser.find_element_by_id('manage_expense_link_id')
         login_link = self.browser.find_element_by_id('login_link_id')
         manage_expense_link.click()
@@ -51,7 +53,7 @@ class NewUserTest(unittest.TestCase):
         self.assertIn('Expenses List', self.browser.title)
 
     def test_login_and_add_expense(self):
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
         manage_expense_link = self.browser.find_element_by_id('manage_expense_link_id')
         login_link = self.browser.find_element_by_id('login_link_id')
         
@@ -98,7 +100,7 @@ class NewUserTest(unittest.TestCase):
         add_button = self.browser.find_element_by_id("add_button_id")
         add_button.click()
         self.assertIn('Expenses List', self.browser.title)
-
+        
 
 
 
@@ -110,5 +112,5 @@ class NewUserTest(unittest.TestCase):
 # Below is the alternate way to run this test
 # Refer https://docs.python.org/2/library/unittest.html
 
-suite = unittest.TestLoader().loadTestsFromTestCase(NewUserTest)
-unittest.TextTestRunner(verbosity=2).run(suite)
+#suite = unittest.TestLoader().loadTestsFromTestCase(NewUserTest)
+#unittest.TextTestRunner(verbosity=2).run(suite)

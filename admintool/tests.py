@@ -101,3 +101,19 @@ class AdminToolTests(TestCase):
         self.assertEquals(resp.redirect_chain[0][0],'http://testserver/login?next=/expenses/add/')
         self.assertEquals(resp.redirect_chain[0][1],302)
 
+    def test_call_to_add_expense_posts_expense(self):
+        request = self.factory.get('expenses/add')
+        request.user = self.user
+        request.method = "POST"
+        request.POST['expenseCategory'] = "Groceries"
+        request.POST['expenseType'] = "Cash"
+        request.POST['vendorType'] = "Walmart"
+        request.POST['expense_date'] = "Apr 02, 2014"
+        request.POST['amount_spent'] = "1234"
+        request.POST['comments'] = "Test expense Unit Test"
+        
+        response = views.save(request)
+
+        self.assertIn("Test expense Unit Test",response.content.decode())
+
+

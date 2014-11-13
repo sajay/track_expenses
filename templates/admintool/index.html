@@ -103,14 +103,16 @@
 
 {% block content %}
 
+
     {% if messages %} 
       {% for message in messages %}
       <p>   {{ message }} </p>
       {% endfor  %}
     {% endif %}
 
-
 {% block title %}<h1> Expenses List </h1>{% endblock %}
+
+
 
 {% if all_expenses %}
 
