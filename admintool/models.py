@@ -48,7 +48,8 @@ class ExpenseTarget(models.Model):
     expenseCategory = models.ForeignKey( ExpenseCategory )
     yr_m = models.CharField( max_length=10 )
     amount = models.DecimalField( max_digits=10, decimal_places=2 )
-    user=models.CharField( max_length=25) 
+#    user=models.CharField( max_length=25) 
+    user = models.ForeignKey(User)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now_add=True)
   
