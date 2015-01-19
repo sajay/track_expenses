@@ -15,7 +15,7 @@
        <tr><td align="center"<strong><b>Upload Targets</b></strong></td></tr>
        <tr><td>
           <p style="width:500px">Upload Target/Forecast csv file here. The data 
-        must be in the following format:<br> <b>Plan Type</b>,<b>Expense Category</b>,<b>Year Month</b>, <b>Amount</b>, <b>User</b>  </p> 
+        must be in the following format:<br> <b>Plan Type</b>,<b>Expense Category</b>,<b>Year Month</b>, <b>Amount</b>  </p> 
 
     <form id="upload_form" method="post" action="{% url 'upload_expense_csv' %}" enctype="multipart/form-data">
      {% csrf_token  %}
