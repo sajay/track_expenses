@@ -14,6 +14,7 @@ from admintool.forms import ExpenseForm
 from admintool.models import ExpenseCategory, ExpenseType, VendorType, Expense, ExpenseTarget
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import User
 
 
 logger=logging.getLogger(__name__)
@@ -161,7 +162,16 @@ def delete_expense(request):
 def upload_target(request):
     logger.info("Into upload_target() :" ) 
     print "Into upload target"
+    userName = None
     logger.info ("Into upload_target:" ) 
+    if request.user.is_authenticated():
+        userName = request.user.username
+    print userName
+    logger.info(userName)
+    u = User.objects.get(username=userName) 
+    if u == None:
+        logger.info("User is not authenticated:" ) 
+        messages.error(request, "User is not authenticated. Please login." )
     if request.method == "GET":
         print "Method is Get, Return back."
         logger.info("Into Method Get, Return back." )
@@ -180,7 +190,7 @@ def upload_target(request):
         for row in dataReader:
             print "Into for loop :" 
             # Empty or incomplete file
-            if len(row[0])==0 or len(row[1])==0 or len(row[2])==0 or len(row[3])==0 or len(row[4]) == 0 :
+            if len(row[0])==0 or len(row[1])==0 or len(row[2])==0 or len(row[3])==0:
                errorList.append(row)
             # Get expenseCategory_id from the ExpenseCategory value.
             else:
@@ -210,7 +220,7 @@ def upload_target(request):
         #Iterate rowList and insert into DB
     for validRow in rowList:    
         print "Saving records to DB: " 
-        target=ExpenseTarget( plan_type = validRow[0].strip(),  expenseCategory=ExpenseCategory(ec.id ), yr_m = validRow[2].strip(), amount=validRow[3], user=validRow[4] ) 
+        target=ExpenseTarget( plan_type = validRow[0].strip(),  expenseCategory=ExpenseCategory(ec.id ), yr_m = validRow[2].strip(), amount=validRow[3], user=User(u.id) ) 
         target.save()  
     if len(rowList)> 0:
         print "Printing RowList:" 
