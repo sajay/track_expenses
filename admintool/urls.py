@@ -8,5 +8,6 @@ urlpatterns = patterns('admintool.views',
     url(r'^delete/$', views.delete_expense, name = 'delete_expense'),
     url(r'^update/$', views.update_expense, name = 'update_expense'),
     url(r'^upload/$', views.upload_target, name = 'upload_expense_csv'),
+    url(r'^expenseCategory/$', views.expenseCategory_list, name = 'expenseCategory_list' ),
    
 )

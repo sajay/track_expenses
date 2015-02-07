@@ -12,8 +12,14 @@ from admintool.forms import ExpenseForm
 import logging 
 from admintool.forms import ExpenseForm
 from admintool.models import ExpenseCategory, ExpenseType, VendorType, Expense, ExpenseTarget
+from admintool.serializers import ExpenseCategorySerializer
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view
+from rest_framework import status
+from rest_framework.response  import Response 
+from rest_framework.permissions import * 
+
 from django.contrib.auth.models import User
 
 
@@ -230,3 +236,11 @@ def upload_target(request):
         messages.error( request, str(len(errorList))  +  " Records did not load. Please correct "  ) 
     #return HttpResponseRedirect(reverse(upload_target)) 
     return render(request, 'admintool/upload_target.html',   )
+
+@api_view(['GET', 'POST'])
+def expenseCategory_list(request):
+     if request.method == 'GET':
+        print "Into GET"
+        ec  =ExpenseCategory.objects.all()
+        serializer = ExpenseCategorySerializer(ec, many=True)
+        return Response(serializer.data)
