@@ -33,11 +33,11 @@ TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = []
 
-#REST_FRAMEWORK = {
-#    'DEFAULT_PERMISSION_CLASSES':[
-#         'rest.framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-#     ] 
-#}
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES':[
+         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+     ] 
+}
 
 
 # Application definition
@@ -49,7 +49,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
- #   'rest_framework',
+    'rest_framework',
     'admintool',
 )
 
