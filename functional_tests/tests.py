@@ -15,14 +15,18 @@ class NewUserTest(LiveServerTestCase):
         self.browser.quit()
 
     def test_user_sees_home_page_and_login_link(self):
-        self.browser.get(self.live_server_url)
+        #self.browser.get(self.live_server_url)
+        self.browser.get('http://localhost:8000')
         self.assertIn('Welcome to Track Expenses', self.browser.title)
         self.browser.find_element_by_id('manage_expense_link_id')
         self.browser.find_element_by_id('login_link_id')
 
         
     def test_user_click_login_from_home_page_goes_to_home_page_and_is_logged_in(self):
-        self.browser.get(self.live_server_url)
+        #self.browser.get(self.live_server_url)
+        
+        self.browser.get('http://localhost:8000')
+        self.assertIn('Welcome to Track Expenses', self.browser.title)
         manage_expense_link = self.browser.find_element_by_id('manage_expense_link_id')
         login_link = self.browser.find_element_by_id('login_link_id')
         
@@ -38,7 +42,10 @@ class NewUserTest(LiveServerTestCase):
         self.assertIn('Welcome to Track Expenses', self.browser.title)
 
     def test_user_clicks_manage_expenses_and_sees_expenses_list(self):
-        self.browser.get(self.live_server_url)
+        #self.browser.get(self.live_server_url)
+       
+        self.browser.get('http://localhost:8000')
+        self.assertIn('Welcome to Track Expenses', self.browser.title)
         manage_expense_link = self.browser.find_element_by_id('manage_expense_link_id')
         login_link = self.browser.find_element_by_id('login_link_id')
         manage_expense_link.click()
@@ -53,7 +60,10 @@ class NewUserTest(LiveServerTestCase):
         self.assertIn('Expenses List', self.browser.title)
 
     def test_login_and_add_expense(self):
-        self.browser.get(self.live_server_url)
+        #self.browser.get(self.live_server_url)
+        
+        self.browser.get('http://localhost:8000')
+        self.assertIn('Welcome to Track Expenses', self.browser.title)
         manage_expense_link = self.browser.find_element_by_id('manage_expense_link_id')
         login_link = self.browser.find_element_by_id('login_link_id')
         
