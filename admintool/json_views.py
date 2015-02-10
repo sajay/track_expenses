@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.response  import Response 
-from rest_framework.permissions import *
+from rest_framework import permissions
 from admintool.models import ExpenseCategory, ExpenseType, VendorType, Expense, ExpenseTarget
 from admintool.serializers import ExpenseSerializer,ExpenseCategorySerializer
 from rest_framework import mixins, generics
