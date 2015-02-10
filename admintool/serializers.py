@@ -12,5 +12,5 @@ class ExpenseCategorySerializer( serializers.ModelSerializer):
 class ExpenseSerializer( serializers.ModelSerializer):
     class Meta:
         model=Expense
-        fields=('id','expenseCategory','expenseType','amount_spent','expense_date', 'vendorType')
+        fields=('id','expenseCategory','expenseType','amount_spent','expense_date', 'vendorType','created_by')
 
