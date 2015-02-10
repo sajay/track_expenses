@@ -3,7 +3,9 @@ from rest_framework import status
 from rest_framework.response  import Response 
 from rest_framework.permissions import *
 from admintool.models import ExpenseCategory, ExpenseType, VendorType, Expense, ExpenseTarget
-from admintool.serializers import ExpenseCategorySerializer
+from admintool.serializers import ExpenseSerializer,ExpenseCategorySerializer
+from rest_framework import mixins, generics
+
 
 
 @api_view(['GET', 'POST'])
@@ -38,4 +40,15 @@ def expenseCategory_detail(request, pk):
     elif request.method == 'DELETE':
         snippet.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ExpenseCollection(mixins.ListModelMixin, mixins.CreateModelMixin,generics.GenericAPIView):
+    queryset = Expense.objects.all() 
+    serializer_class = ExpenseSerializer
+    
+    def get(self, request): 
+        return self.list(request)
+    
+    def post(self, request): 
+        return self.create(request)
 
