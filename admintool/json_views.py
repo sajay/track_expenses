@@ -6,8 +6,6 @@ from admintool.models import ExpenseCategory, ExpenseType, VendorType, Expense, 
 from admintool.serializers import ExpenseSerializer,ExpenseCategorySerializer
 from rest_framework import mixins, generics
 
-
-
 @api_view(['GET', 'POST'])
 def expenseCategory_list(request):
      if request.method == 'GET':
@@ -65,3 +63,16 @@ class ExpenseDetail(mixins.RetrieveModelMixin, mixins.UpdateModelMixin,mixins.De
     
     def delete(self, request, *args, **kwargs): 
         return self.destroy(request, *args, **kwargs)
+
+@api_view(['GET', 'POST', 'DELETE'])
+def expense_filterByVendor( request, vendor_name):
+    try:
+        print "Vendor Name is  :" + vendor_name
+        vendor = VendorType.objects.filter( vendor_name=vendor_name) 
+        exp = Expense.objects.filter(vendorType_id=vendor[0].id) 
+    except Expense.DoesNotExist:    
+        return Response( status=status.HTTP_404_NOT_FOUND) 
+
+    if request.method == 'GET':
+        serializer = ExpenseSerializer(exp, many=True) 
+        return Response(serializer.data)
