@@ -36,11 +36,7 @@
             var newAmount = $("#id_amount_"+key).val()
             var newPaymentType = $("#id_expense_type_"+key).val()
             var newVendor = $("#id_vendor_type_"+key).val()
-
             
-            alert('date spent up' +id +newDateSpent+ newCategory + newAmount +
-            newPaymentType + newVendor)
-
             jQuery.post( "{%url 'update_expense' %}", 
                      {"id":key, 
                       "expense_date":newDateSpent,
@@ -55,16 +51,14 @@
                         }
                         else{
                             $("#tr_"+key).effect("highlight",{color:"green"}, 6000);
-                            //var col = $(".graybtn").parent().get(0);
-                            //var row = $(col).parent("tr");
-                            //row.css("foreground-color":"green")
                            $("#messageBody").html(response);
                             $("#messageDiv").dialog("open");
                         }//else close
                       }//function response
                       ) //post update
                       
-} else if (oper == "dl"  )  { // Delete Record 
+} else if (oper == "dl"  )  { // Delete Record
+         $("#tr_"+key).effect("highlight",{color:"orange"},6000);
          var delPrompt = confirm("Are you sure you  want to  delete this Expense record?");
          if(delPrompt){
          jQuery.post("{% url 'delete_expense' %}", 
@@ -74,9 +68,7 @@
                          $("#errorBody").html(response);
                          $("#errorDiv").dialog("open");
                       }else{
-                         var col  = $(".graybtn").parent().get(0);
-                         var row = $(col).parent("tr");
-                         row.remove();
+                         $("#tr_"+key).remove();
                          $("#messageBody").html(response);
                          $("#messageDiv").dialog("open");
                       }// end of else   
