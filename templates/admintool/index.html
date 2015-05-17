@@ -96,16 +96,23 @@
 {% block content %}
 
 
+
+
+{% block title %}<h1> Expenses List </h1>{% endblock %}
+
     {% if messages %} 
       {% for message in messages %}
       <p>   {{ message }} </p>
       {% endfor  %}
     {% endif %}
 
-{% block title %}<h1> Expenses List </h1>{% endblock %}
+print {{ request }}
 
-
-
+{{request.session.is_expense_added}}
+ {% ifequal request.session.is_expense_added True %}
+        <p> Expense added successfully </p>
+    {% endifequal %}
+ 
 {% if all_expenses %}
 
 <div >
