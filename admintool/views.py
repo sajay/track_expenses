@@ -30,10 +30,12 @@ def index(request):
     expenseType = ExpenseType.objects.all()
     vendorType = VendorType.objects.all()
  
-    t = loader.get_template('admintool/index.html')
-    c = Context({'all_expenses':all_expenses,'expenseCategory':expenseCategory, 'expenseType':expenseType,'vendorType':vendorType })
-    return HttpResponse(t.render(c))
-
+    #t = loader.get_template('admintool/index.html')
+    #c = Context({'all_expenses':all_expenses,'expenseCategory':expenseCategory, 'expenseType':expenseType,'vendorType':vendorType })
+    #return HttpResponse(t.render(c))
+    
+    return render(request, 'admintool/index.html', {'all_expenses':all_expenses,'expenseCategory':expenseCategory, 'expenseType':expenseType,'vendorType':vendorType })
+    
 # I  have written the two methods below to test the logging from the Django Shell. We can remove these after we have a grip on the logging framework.
 def test_logging():
     print("name is : " + __name__)
@@ -105,9 +107,6 @@ def save_expense(request):
     ec.save()
     messages.success( request, "The Expense was saved successfully." )
     return redirect('/expenses')
-    #HttpResponseRedirect(reverse(index)) 
-    #return render(request, 'admintool/index.html', {'form':form})
-
 
 @login_required(login_url='/login')
 @csrf_exempt
