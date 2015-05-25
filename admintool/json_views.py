@@ -73,6 +73,7 @@ ex:  http://127.0.0.1:8000/api/v1/expense/Walmart
 @api_view(['GET', 'POST', 'DELETE'])
 def expense_filterByVendor( request, vendor_name):
     try:
+        print "Into expense_filterByVendor:"  
         print "Vendor Name is  :" + vendor_name
         vendor = VendorType.objects.filter( vendor_name=vendor_name) 
         exp = Expense.objects.filter(vendorType_id=vendor[0].id) 
